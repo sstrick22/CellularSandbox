@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+
+<link rel="import" href="packages/polymer/polymer.html">
+
+<link href="packages/core_elements/core_collapse.html" rel="import">
+<link href="packages/core_elements/core_drawer_panel.html" rel="import">
+<link href="packages/core_elements/core_header_panel.html" rel="import">
+<link href="packages/core_elements/core_icon_button.html" rel="import">
+<link href="packages/core_elements/core_label.html" rel="import">
+<link href="packages/core_elements/core_menu.html" rel="import">
+<link href="packages/core_elements/core_toolbar.html" rel="import">
+
+<link href="packages/paper_elements/paper_action_dialog.html" rel="import">
+<link href="packages/paper_elements/paper_button.html" rel="import">
+<link href="packages/paper_elements/paper_dropdown.html" rel="import">
+<link href="packages/paper_elements/paper_dropdown_menu.html" rel="import">
+<link href="packages/paper_elements/paper_item.html" rel="import">
+<link href="packages/paper_elements/paper_radio_button.html" rel="import">
+<link href="packages/paper_elements/paper_radio_group.html" rel="import">
+<link href="packages/paper_elements/paper_toast.html" rel="import">
+
+<polymer-element name="life-app">
+	<template>
+		<style>
+			core-toolbar {
+				background-color: #03A9F4;
+			}
+
+			paper-dropdown-menu {
+				box-sizing: border-box;
+				width: 100px;
+			}
+
+			core-menu {
+				box-sizing: border-box;
+				width: 100px;
+			}
+
+			paper-item {
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+
+			.menuheader {
+				background-color: #56BA89;
+			}
+
+			.collapseheader {
+				padding: 10px 15px;
+				background-color: #56BA89;
+				border: 1px solid #dedede;
+				font-size: 18px;
+				cursor: pointer;
+			}
+
+			.collapsecontent {
+				padding: 10px;
+				background-color: white;
+				border: 1px solid #dedede;
+				border-top: none;
+			}
+
+			.disableselect {
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				-webkit-tap-highlight-color: rgba(0,0,0,0);
+			}
+
+			#title {
+				text-align: center;
+			}
+
+			#content {
+				overflow: scroll;
+			}
+
+			#import_drop {
+				border: 2px dashed #bbb;
+				-webkit-border-radius: 5px;
+				-moz-border-radius: 5px;
+				border-radius: 5px;
+				color: #bbb;
+				font-size: 20pt;
+				font-weight: bold;
+				padding: 25px;
+				text-align: center;
+			}
+
+			#import_drop.hover {
+				background-color: #def;
+				border-color: #777;
+				color: #777;
+			}
+
+			#grid_container {
+				position: relative;
+				border: 2px solid black;
+			}
+
+			#grid_background {
+    			position: absolute;
+    			width: 100%;
+    			height: 100%;
+    			top: 0px;
+    			left: 0px;
+    			z-index: -1;
+			}
+
+			#grid_foreground {
+    			position: absolute;
+    			width: 100%;
+    			height: 100%;
+    			top: 0px;
+    			left: 0px;
+			}
+
+		</style>
+		<core-drawer-panel drawerWidth="300px" responsiveWidth="825px">
+			<core-header-panel drawer mode="seamed">
+				<core-toolbar class="menuheader">
+					<div class="disableselect">Controls</div>
+				</core-toolbar>
+				<div vertical layout>
+					<div id="play_header" class="collapseheader disableselect">Play</div>
+					<core-collapse id="play_collapse" opened="true" allowOverflow="true">
+	    				<div class="collapsecontent">
+							<div horizontal around-justified layout>
+							    <paper-radio-group id="speed_radio_group" valueattr="label" selected="Normal">
+							    	<paper-radio-button label="Slow"></paper-radio-button>
+							    	<paper-radio-button label="Normal"></paper-radio-button>
+							    	<paper-radio-button label="Fast"></paper-radio-button>
+							    </paper-radio-group>
+							</div>
+							<div horizontal around-justified layout>
+								<paper-button id="play_button" raised>Play</paper-button>
+								<paper-button id="step_button" raised disabled="{{playing}}">Step</paper-button>
+								<paper-button id="clear_button" raised disabled="{{playing}}">Clear</paper-button>
+							</div>
+						</div>
+					</core-collapse>
+
+					<div id="click_header" class="collapseheader disableselect">Click</div>
+					<core-collapse id="click_collapse" opened="true" allowOverflow="true">
+	    				<div class="collapsecontent">
+							<div horizontal around-justified layout>
+								<paper-dropdown-menu id="state_dropdown" label="State">
+									<paper-dropdown class="dropdown" duration="250">
+										<core-menu id="state_menu" class="menu" valueattr="label">
+								            <template repeat="{{state in states}}">
+								              <paper-item label="{{state}}">{{state}}</paper-item>
+								            </template>
+							  			</core-menu>
+						  			</paper-dropdown>
+								</paper-dropdown-menu>
+								<paper-dropdown-menu id="pattern_dropdown" label="Pattern" disabled>
+									<paper-dropdown class="dropdown" duration="250">
+										<core-menu id="pattern_menu" class="menu" valueattr="label" selected="Cell">
+								  			<paper-item label="Cell">Cell</paper-item>
+							  			</core-menu>
+						  			</paper-dropdown>
+								</paper-dropdown-menu>
+							</div>
+						</div>
+					</core-collapse>
+
+					<div id="import_header" class="collapseheader disableselect">Import</div>
+					<core-collapse id="import_collapse" opened="true" allowOverflow="true">
+	    				<div class="collapsecontent">
+							<div id="import_drop">Drop files here</div>
+						</div>
+					</core-collapse>
+				</div>
+			</core-header-panel>
+			<core-header-panel main mode="seamed">
+				<core-toolbar>
+					<core-icon-button icon="menu" core-drawer-toggle></core-icon-button>
+					<div flex id="title" class="disableselect">Cellular Automaton - {{configurationName}}</div>
+					<core-icon-button icon="settings"></core-icon-button>
+				</core-toolbar>
+				<div id="content" fit horizontal around-justified layout>
+					<div id="grid_container" self-center>
+						<canvas id="grid_background" class="disableselect"></canvas>
+						<canvas id="grid_foreground" class="disableselect"></canvas>
+					</div>
+				</div>
+			</core-header-panel>
+		</core-drawer-panel>
+		<paper-toast id="alert_toast"></paper-toast>
+		<paper-action-dialog id="state_fix_dialog">
+			<core-label>
+				Label:
+				<paper-dropdown-menu for>
+					<paper-dropdown class="dropdown" duration="250">
+						<core-menu id="state_menu" class="menu" valueattr="label">
+				            <template repeat="{{state in validStates">
+				              <paper-item label="{{state}}">{{state}}</paper-item>
+				            </template>
+			  			</core-menu>
+		  			</paper-dropdown>
+				</paper-dropdown-menu>
+    		</core-label>
+			<paper-button affirmative>Cancel</paper-button>
+			<paper-button affirmative autofocus>Accept</paper-button>
+		</paper-action-dialog>
+	</template>
+
+	<script type="application/dart" src="life_app.dart"></script>
+</polymer-element>
