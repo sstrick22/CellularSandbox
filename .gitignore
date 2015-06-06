@@ -44,3 +44,8 @@ Temporary Items
 
 # Directories for Jetbrains IDE generated files
 .idea
+
+# Directories for pub
+.pub
+build
+packages

@@ -1,4 +1,4 @@
-name: Life
+name: life
 description: A customizable implementation of Conways Game of Life
 dependencies:
   polymer: ">=0.15.1 <0.16.0"

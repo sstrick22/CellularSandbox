@@ -1,24 +1,7 @@
-library life;
-
 import 'dart:collection' show SplayTreeSet, SplayTreeMap;
-import 'dart:convert' show JSON;
-import 'dart:html';
-import 'dart:math' show Random;
 import 'package:unittest/unittest.dart';
+import 'package:life/life.dart';
 
-part 'configuration.dart';
-part 'graphics.dart';
-part 'grid.dart';
-part 'transition.dart';
-part 'condition/condition.dart';
-part 'condition/token.dart';
-part 'condition/node.dart';
-part 'condition/lexer.dart';
-part 'condition/parser.dart';
-
-/**
- * Testing Code
- */
 void main() {
 	String json1 = '{"name":"Original","states":[{"name":"DEAD","color":"#808080","transitions":[{"condition":"LIVE == 3","next":"LIVE"}]},{"name":"LIVE","color":"#FFFF00","transitions":[{"condition":"LIVE < 2 || LIVE > 3","next":"DEAD"}]}],"default":"DEAD"}';
 	String json2 = '{"name":"Original Genesis","states":[{"name":"DEAD","color":"#808080","transitions":[{"condition":"LIVE == 3","next":"LIVE"},{"condition":"LIVE == 0","next":{"LIVE":1,"DEAD":9}}]},{"name":"LIVE","color":"#FFFF00","transitions":[{"condition":"LIVE < 2 || LIVE > 3","next":"DEAD"}]}],"default":"DEAD"}';
