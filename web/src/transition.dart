@@ -46,7 +46,7 @@ class RandomNextStateGenerator implements NextStateGenerator {
 				return state;
 		}
 
-		// Sould never get past the loop
+		// Should never get past the loop
 		throw new Error();
 	}
 
