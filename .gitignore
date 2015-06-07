@@ -48,4 +48,6 @@ Temporary Items
 # Directories for pub
 .pub
 build
-packages
+test/packages
+web/packages
+web/life/packages
