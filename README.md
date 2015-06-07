@@ -127,8 +127,8 @@ a permanent dead state could be easily written as:
 ## Configuration
 
 A configuration encapsulates the rules of a cellular automata that this application can simulate.  The three properties of a configuration are the `name` of the configuration, the possible `states` that a cell can be 
-using this configuration, and the `default` state that cells will be on generation 0.  For example, Conway's 
-Game of Life can be represented as:
+using this configuration, and the `default` state that cells will be on generation 0 (and that all cells 
+outside of the 100x100 grid are permanently).  For example, Conway's Game of Life can be represented as:
 
 ```json
 {
