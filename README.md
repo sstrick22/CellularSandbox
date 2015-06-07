@@ -73,8 +73,8 @@ in Conway's Game of Life would be:
 }
 ```
 
-For a non-deterministic transition, `next` can be a map of state to an integer weight number. In this 
-case, the next state is determined randomly each time the transition is taken in a process analogous to 
+For a non-deterministic transition, `next` can be a map of state to an integer weight. In this case, 
+the next state is determined randomly each time the transition is taken in a process analogous to 
 spinning a roulette wheel with each state owning a number of slots equal to its weight.  Whichever slot 
 the ball lands in is the next state for that specific cell transition.  For example, a transition where 
 a cell would become `LIVE` 1% of the time and `DEAD` 99% of the time if the cell has no `LIVE` neighbors 
