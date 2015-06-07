@@ -9,7 +9,9 @@ occur with a simple json configuration file described below.
 
 A condition is an equation used to specify when a state transition should occur.  For example,
 a condition describing when a "LIVE" cell should transition to "DEAD" in Conway's Game of Life 
-would be `LIVE < 2 || LIVE > 3`. The symbols available in a condition are:
+would be `LIVE < 2 || LIVE > 3`. A condition evaluates to true or false indicating whether the 
+condition is met. The empty condition is a special case that always evaluates to true. The 
+symbols available in a condition are:
 
 ### Values
 
