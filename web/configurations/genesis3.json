@@ -1,5 +1,5 @@
 {
-  "name": "Original Genesis",
+  "name": "Genesis 1:100",
   "states": [
     {
       "name": "DEAD",
@@ -13,7 +13,7 @@
           "condition": "LIVE == 0",
           "next": {
             "LIVE": 1,
-            "DEAD": 199
+            "DEAD": 99
           }
         }
       ]

@@ -13,7 +13,7 @@ const Duration SLOW = const Duration(milliseconds: 250);
 const Duration NORMAL = const Duration(milliseconds: 100);
 const Duration FAST = const Duration(milliseconds: 0);
 
-const String DEFAULT_CONFIGURATION = "configurations/original.json";
+const String DEFAULT_CONFIGURATION = "configurations/conway.json";
 
 @CustomTag('life-app')
 class LifeApp extends PolymerElement {
