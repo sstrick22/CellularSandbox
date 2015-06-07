@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:html';
-import 'package:life/life.dart';
+import '../lib/life.dart';
 import 'package:core_elements/core_collapse.dart';
 import 'package:core_elements/core_menu.dart';
 import 'package:paper_elements/paper_action_dialog.dart';
@@ -13,7 +13,7 @@ const Duration SLOW = const Duration(milliseconds: 250);
 const Duration NORMAL = const Duration(milliseconds: 100);
 const Duration FAST = const Duration(milliseconds: 0);
 
-const String DEFAULT_CONFIGURATION = "../../configurations/original.json";
+const String DEFAULT_CONFIGURATION = "configurations/original.json";
 
 @CustomTag('life-app')
 class LifeApp extends PolymerElement {
