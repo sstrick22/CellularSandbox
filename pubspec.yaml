@@ -1,5 +1,5 @@
 name: life
-description: A customizable implementation of Conways Game of Life
+description: A customizable cellular automata sandbox
 dependencies:
   polymer: ">=0.15.1 <0.16.0"
   core_elements: ">=0.6.0"
