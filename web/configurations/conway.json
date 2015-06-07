@@ -1,5 +1,5 @@
 {
-  "name": "Original Genesis",
+  "name": "Conway's Game of Life",
   "states": [
     {
       "name": "DEAD",
@@ -8,13 +8,6 @@
         {
           "condition": "LIVE == 3",
           "next": "LIVE"
-        },
-        {
-          "condition": "LIVE == 0",
-          "next": {
-            "LIVE": 1,
-            "DEAD": 99
-          }
         }
       ]
     },
