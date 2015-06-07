@@ -8,8 +8,8 @@ occur with a simple json configuration file described below.
 ## Condition
 
 A condition is an equation used to specify when a state transition should occur.  For example,
-a condition describing when a "DEAD" cell should transition to "LIVE" in Conway's Game of Life 
-would be `LIVE == 2 || LIVE == 3`. The symbols available in a condition are:
+a condition describing when a "LIVE" cell should transition to "DEAD" in Conway's Game of Life 
+would be `LIVE < 2 || LIVE > 3`. The symbols available in a condition are:
 
 ### Values
 
@@ -18,9 +18,10 @@ Any string of digits (0-9). For example, `3` or `52`.
 Resolves to the **number** represented by this string.
 	
 #### State Variables
-Any string matching a state specified in the current configuration (case sensitive). For 
-example, `dead` or `LIVE`.  
-Resolves to the **number** of neighbors of the current cell that are in this state.
+Any string of letters (a-z,A-Z) matching a state specified in the current configuration 
+(case sensitive). For example, `dead` or `LIVE`.  
+Resolves to the **number** of neighbors of the current cell that are in the state represented 
+by this string.
 
 #### Temporal Variables (Coming Soon)
 One of the strings `[AGE]` and `[GEN]` (case insensitive).  
@@ -52,11 +53,76 @@ conversions:
 - **bool** to **number**: The bool false is converted to 0 and the bool true is converted to 1.
 
 The comparison operators have a higher precedence than the logical operators.  That means in a 
-condition such as `LIVE == 3 || LIVE > 5`, the comparision operators `==` and `>` will be evaluated 
+condition such as `LIVE == 3 || DEAD > 5`, the comparision operators `==` and `>` will be evaluated 
 before the logical operator `||`.  Consecutive operators in the same class will be evaluated left to 
 right.
 
 ## Transition
+
+A transition encapsulates a path that a cell in a specific state can take to become another state. 
+The two properties of a transition are the `condition` (described above) that must be met for the 
+transition to take place, and the `next` state (or states) that a cell can take if the condition is met.  
+
+For a deterministic transition, `next` can simply be a string matching a state specified in the current  configuration (case sensitive). For example, a transition that a `DEAD` cell can take to become `LIVE` 
+in Conway's Game of Life would be:
+
+```json
+{
+  "condition": "LIVE == 3",
+  "next": "LIVE"
+}
+```
+
+For a non-deterministic transition, `next` can be a map of state to an integer weight number. In this 
+case, the next state is determined randomly each time the transition is taken in a process analogous to 
+spinning a roulette wheel with each state owning a number of slots equal to its weight.  Whichever slot 
+the ball lands in is the next state for that specific cell transition.  For example, a transition where 
+a cell would become `LIVE` 1% of the time and `DEAD` 99% of the time if the cell has no `LIVE` neighbors 
+would be:
+
+```json
+{
+  "condition": "LIVE == 0",
+  "next": {
+    "LIVE": 1,
+    "DEAD": 99,
+  }
+}
+```
+
+## State
+
+A state encapsulates a possible state that a cell can be in during a given generation. The three 
+properties of a state are the `name` of the state, the hex `color` that a cell will be when in the 
+state, and the `transitions` that the state can take to become another state. For example, the "LIVE" 
+state in Conway's Game of Life can be represented as:
+
+```json
+{
+  "name": "LIVE",
+  "color": "#FFFF00",
+  "transitions": [
+    {
+      "condition": "LIVE < 2 || LIVE > 3",
+      "next": "DEAD",
+    }
+  ]
+}
+```
+
+The order of the `transitions` list is important.  During a generation shift for a cell, the 
+transition conditions for the cell's state will be evaluated in the order that the transitions 
+are listed. The first transition whose condition evaluates to true will be taken. If no transition 
+conditions evaluate to true, the cell's state will not change for the next generation.  For example, 
+a permanent dead state could be easily written as:
+
+```json
+{
+  "name": "PERMADEAD",
+  "color": "#000000",
+  "transitions": []
+}
+```
 
 ## Configuration
 
