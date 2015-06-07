@@ -23,7 +23,7 @@ Any string of letters (a-z,A-Z) matching a state specified in the current config
 Resolves to the **number** of neighbors of the current cell that are in the state represented 
 by this string.
 
-#### Temporal Variables (Coming Soon)
+#### ~~Temporal Variables~~ (Coming Soon)
 One of the strings `[AGE]` and `[GEN]` (case insensitive).  
 `[AGE]`: Resolves to the **number** of consecutive generations prior to the current generation
 where the current cell was in its current state.  
@@ -126,3 +126,35 @@ a permanent dead state could be easily written as:
 
 ## Configuration
 
+A configuration encapsulates the rules of a cellular automata that this application can simulate.  The three properties of a configuration are the `name` of the configuration, the possible `states` that a cell can be 
+using this configuration, and the `default` state that cells will be on generation 0.  For example, Conway's 
+Game of Life can be represented as:
+
+```json
+{
+  "name": "Conway's Game of Life",
+  "states": [
+    {
+      "name": "DEAD",
+      "color": "#808080",
+      "transitions": [
+        {
+          "condition": "LIVE == 3",
+          "next": "LIVE"
+        }
+      ]
+    },
+    {
+      "name": "LIVE",
+      "color": "#FFFF00",
+      "transitions": [
+        {
+          "condition": "LIVE < 2 || LIVE > 3",
+          "next": "DEAD"
+        }
+      ]
+    }
+  ],
+  "default": "DEAD"
+}
+```
