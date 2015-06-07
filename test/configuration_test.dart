@@ -1,36 +1,36 @@
 import 'dart:collection' show SplayTreeSet, SplayTreeMap;
 import 'package:unittest/unittest.dart';
-import 'package:life/life.dart';
+import 'package:life/life.dart' as life;
 
 void main() {
 	String json1 = '{"name":"Original","states":[{"name":"DEAD","color":"#808080","transitions":[{"condition":"LIVE == 3","next":"LIVE"}]},{"name":"LIVE","color":"#FFFF00","transitions":[{"condition":"LIVE < 2 || LIVE > 3","next":"DEAD"}]}],"default":"DEAD"}';
 	String json2 = '{"name":"Original Genesis","states":[{"name":"DEAD","color":"#808080","transitions":[{"condition":"LIVE == 3","next":"LIVE"},{"condition":"LIVE == 0","next":{"LIVE":1,"DEAD":9}}]},{"name":"LIVE","color":"#FFFF00","transitions":[{"condition":"LIVE < 2 || LIVE > 3","next":"DEAD"}]}],"default":"DEAD"}';
 
 	group('Configuration parsing', () {
-		test("Original", () => expect(new Configuration.fromJson(json1), equals(
-			new Configuration(
+		test("Original", () => expect(new life.Configuration.fromJson(json1), equals(
+			new life.Configuration(
             	"Original",
             	"DEAD",
             	["DEAD", "LIVE"],
             	new SplayTreeMap.from({"DEAD":"#808080", "LIVE":"#FFFF00"}),
             	new SplayTreeMap.from({
-            		"DEAD": [new Transition(new Condition("LIVE == 3"), new ConstantNextStateGenerator("LIVE"))],
-            		"LIVE": [new Transition(new Condition("LIVE < 2 || LIVE > 3"), new ConstantNextStateGenerator("DEAD"))]
+            		"DEAD": [new life.Transition(new life.Condition("LIVE == 3"), new life.ConstantNextStateGenerator("LIVE"))],
+            		"LIVE": [new life.Transition(new life.Condition("LIVE < 2 || LIVE > 3"), new life.ConstantNextStateGenerator("DEAD"))]
             	})
             )
 		)));
-        test("Original Genesis", () => expect(new Configuration.fromJson(json2), equals(
-    		new Configuration(
+        test("Original Genesis", () => expect(new life.Configuration.fromJson(json2), equals(
+    		new life.Configuration(
             	"Original Genesis",
             	"DEAD",
             	["DEAD", "LIVE"],
             	new SplayTreeMap.from({"DEAD":"#808080", "LIVE":"#FFFF00"}),
             	new SplayTreeMap.from({
             		"DEAD": [
-            			new Transition(new Condition("LIVE == 3"), new ConstantNextStateGenerator("LIVE")),
-            			new Transition(new Condition("LIVE == 0"), new RandomNextStateGenerator(new SplayTreeMap.from({"DEAD":9, "LIVE":1}), 10))
+            			new life.Transition(new life.Condition("LIVE == 3"), new life.ConstantNextStateGenerator("LIVE")),
+            			new life.Transition(new life.Condition("LIVE == 0"), new life.RandomNextStateGenerator(new SplayTreeMap.from({"DEAD":9, "LIVE":1}), 10))
             		],
-            		"LIVE": [new Transition(new Condition("LIVE < 2 || LIVE > 3"), new ConstantNextStateGenerator("DEAD"))]
+            		"LIVE": [new life.Transition(new life.Condition("LIVE < 2 || LIVE > 3"), new life.ConstantNextStateGenerator("DEAD"))]
             	})
             )
         )));
@@ -42,49 +42,49 @@ void main() {
 
 	group('Condition lexing', () {
 		test(condition1, () {
-			expect(ConditionLexer.lexCondition(condition1), orderedEquals(
+			expect(life.ConditionLexer.lexCondition(condition1), orderedEquals(
 				[
-					new ConditionToken(ConditionToken.STATE_TYPE, "DEAD"),
-					new ConditionToken(ConditionToken.OPERATOR_TYPE, "=="),
-					new ConditionToken(ConditionToken.NUMBER_TYPE, "0")
+					new life.ConditionToken(life.ConditionToken.STATE_TYPE, "DEAD"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "=="),
+					new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "0")
 				]
 			));
 		});
 		test(condition2, () {
-			expect(ConditionLexer.lexCondition(condition2), orderedEquals(
+			expect(life.ConditionLexer.lexCondition(condition2), orderedEquals(
 				[
-					new ConditionToken(ConditionToken.STATE_TYPE, "LIVE"),
-					new ConditionToken(ConditionToken.OPERATOR_TYPE, "<"),
-					new ConditionToken(ConditionToken.NUMBER_TYPE, "2"),
-					new ConditionToken(ConditionToken.OPERATOR_TYPE, "||"),
-					new ConditionToken(ConditionToken.STATE_TYPE, "LIVE"),
-					new ConditionToken(ConditionToken.OPERATOR_TYPE, ">"),
-					new ConditionToken(ConditionToken.NUMBER_TYPE, "3")
+					new life.ConditionToken(life.ConditionToken.STATE_TYPE, "LIVE"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "<"),
+					new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "2"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "||"),
+					new life.ConditionToken(life.ConditionToken.STATE_TYPE, "LIVE"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, ">"),
+					new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "3")
 				]
 			));
 		});
 		test(condition3, () {
-			expect(ConditionLexer.lexCondition(condition3), orderedEquals(
+			expect(life.ConditionLexer.lexCondition(condition3), orderedEquals(
 				[
-					new ConditionToken(ConditionToken.LPAREN_TYPE, "("),
-					new ConditionToken(ConditionToken.STATE_TYPE, "LIVE"),
-					new ConditionToken(ConditionToken.OPERATOR_TYPE, ">="),
-					new ConditionToken(ConditionToken.NUMBER_TYPE, "3"),
-					new ConditionToken(ConditionToken.OPERATOR_TYPE, "&&"),
-					new ConditionToken(ConditionToken.STATE_TYPE, "DEAD"),
-					new ConditionToken(ConditionToken.OPERATOR_TYPE, "=="),
-					new ConditionToken(ConditionToken.NUMBER_TYPE, "0"),
-					new ConditionToken(ConditionToken.RPAREN_TYPE, ")"),
-					new ConditionToken(ConditionToken.OPERATOR_TYPE, "||"),
-					new ConditionToken(ConditionToken.LPAREN_TYPE, "("),
-					new ConditionToken(ConditionToken.STATE_TYPE, "LIVE"),
-					new ConditionToken(ConditionToken.OPERATOR_TYPE, "<="),
-					new ConditionToken(ConditionToken.NUMBER_TYPE, "2"),
-					new ConditionToken(ConditionToken.OPERATOR_TYPE, "&&"),
-					new ConditionToken(ConditionToken.STATE_TYPE, "IMMORTAL"),
-					new ConditionToken(ConditionToken.OPERATOR_TYPE, "!="),
-					new ConditionToken(ConditionToken.NUMBER_TYPE, "0"),
-					new ConditionToken(ConditionToken.RPAREN_TYPE, ")")
+					new life.ConditionToken(life.ConditionToken.LPAREN_TYPE, "("),
+					new life.ConditionToken(life.ConditionToken.STATE_TYPE, "LIVE"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, ">="),
+					new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "3"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "&&"),
+					new life.ConditionToken(life.ConditionToken.STATE_TYPE, "DEAD"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "=="),
+					new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "0"),
+					new life.ConditionToken(life.ConditionToken.RPAREN_TYPE, ")"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "||"),
+					new life.ConditionToken(life.ConditionToken.LPAREN_TYPE, "("),
+					new life.ConditionToken(life.ConditionToken.STATE_TYPE, "LIVE"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "<="),
+					new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "2"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "&&"),
+					new life.ConditionToken(life.ConditionToken.STATE_TYPE, "IMMORTAL"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "!="),
+					new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "0"),
+					new life.ConditionToken(life.ConditionToken.RPAREN_TYPE, ")")
 				]
 			));
 		});
@@ -92,59 +92,59 @@ void main() {
 
 	group('Condition parsing', () {
 		test(condition1, () {
-			expect(ConditionParser.parseCondition(ConditionLexer.lexCondition(condition1)), equals(
-				new OperatorConditionNode(
-					new StateConditionNode("DEAD"),
+			expect(life.ConditionParser.parseCondition(life.ConditionLexer.lexCondition(condition1)), equals(
+				new life.OperatorConditionNode(
+					new life.StateConditionNode("DEAD"),
 					"==",
-					new NumberConditionNode("0")
+					new life.NumberConditionNode("0")
 				)
 			));
 		});
 		test(condition2, () {
-			expect(ConditionParser.parseCondition(ConditionLexer.lexCondition(condition2)), equals(
-				new OperatorConditionNode(
-					new OperatorConditionNode(
-    					new StateConditionNode("LIVE"),
+			expect(life.ConditionParser.parseCondition(life.ConditionLexer.lexCondition(condition2)), equals(
+				new life.OperatorConditionNode(
+					new life.OperatorConditionNode(
+    					new life.StateConditionNode("LIVE"),
     					"<",
-    					new NumberConditionNode("2")
+    					new life.NumberConditionNode("2")
     				),
     				"||",
-    				new OperatorConditionNode(
-    					new StateConditionNode("LIVE"),
+    				new life.OperatorConditionNode(
+    					new life.StateConditionNode("LIVE"),
     					">",
-    					new NumberConditionNode("3")
+    					new life.NumberConditionNode("3")
     				)
 				)
 			));
 		});
 		test(condition3, () {
-			expect(ConditionParser.parseCondition(ConditionLexer.lexCondition(condition3)), equals(
-				new OperatorConditionNode(
-					new OperatorConditionNode(
-						new OperatorConditionNode(
-	    					new StateConditionNode("LIVE"),
+			expect(life.ConditionParser.parseCondition(life.ConditionLexer.lexCondition(condition3)), equals(
+				new life.OperatorConditionNode(
+					new life.OperatorConditionNode(
+						new life.OperatorConditionNode(
+	    					new life.StateConditionNode("LIVE"),
 	    					">=",
-	    					new NumberConditionNode("3")
+	    					new life.NumberConditionNode("3")
 	    				),
 	    				"&&",
-	    				new OperatorConditionNode(
-	    					new StateConditionNode("DEAD"),
+	    				new life.OperatorConditionNode(
+	    					new life.StateConditionNode("DEAD"),
 	    					"==",
-	    					new NumberConditionNode("0")
+	    					new life.NumberConditionNode("0")
 	    				)
 					),
 					"||",
-					new OperatorConditionNode(
-						new OperatorConditionNode(
-	    					new StateConditionNode("LIVE"),
+					new life.OperatorConditionNode(
+						new life.OperatorConditionNode(
+	    					new life.StateConditionNode("LIVE"),
 	    					"<=",
-	    					new NumberConditionNode("2")
+	    					new life.NumberConditionNode("2")
 	    				),
 	    				"&&",
-	    				new OperatorConditionNode(
-	    					new StateConditionNode("IMMORTAL"),
+	    				new life.OperatorConditionNode(
+	    					new life.StateConditionNode("IMMORTAL"),
 	    					"!=",
-	    					new NumberConditionNode("0")
+	    					new life.NumberConditionNode("0")
 	    				)
 					)
 				)
