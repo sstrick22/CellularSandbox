@@ -44,8 +44,7 @@ class Grid {
 		Map<String, int> neighborStateDistribution = new Map<String, int>();
 		for (int row = 0; row < _rows; row++) {
 			for (int col = 0; col < _cols; col++) {
-        // Check if age should be reset. This cell's state could have
-        // been adjusted between generation advances.
+        // Check if age should be reset.
         if (_nextCellBuffer[row][col].state != _cells[row][col].state)
           _cells[row][col].age = 0;
 
@@ -53,7 +52,7 @@ class Grid {
         // no transitions are taken.
 				_nextCellBuffer[row][col].state = _cells[row][col].state;
 
-        List<Transition> transitions = stateTransitionMap[_cells[row][col]];
+        List<Transition> transitions = stateTransitionMap[_cells[row][col].state];
 				if (transitions.isNotEmpty) {
 					// Determine neighbor state distribution
 					neighborStateDistribution.clear();
@@ -79,11 +78,9 @@ class Grid {
 					}
 				}
 
-        // Check if the age advanced during generation advance
+        // Check if age advanced during generation advance
         if (_nextCellBuffer[row][col].state == _cells[row][col].state)
           _nextCellBuffer[row][col].age = _cells[row][col].age + 1;
-        else
-          _nextCellBuffer[row][col].age = 0;
 			}
 		}
 
