@@ -1,7 +1,7 @@
 part of life;
 
 abstract class ConditionNode {
-	int evaluate(Map<String, int> neighborStateDistribution);
+	int evaluate(ConditionContext context);
 
 	bool operator ==(Object obj);
 }
@@ -12,32 +12,32 @@ class OperatorConditionNode implements ConditionNode {
 
 	OperatorConditionNode(this._lhs, this._operator, this._rhs);
 
-	int evaluate(Map<String, int> neighborStateDistribution) {
+	int evaluate(ConditionContext context) {
 		bool result;
 		switch (_operator) {
 			case '==':
-				result = _lhs.evaluate(neighborStateDistribution) == _rhs.evaluate(neighborStateDistribution);
+				result = _lhs.evaluate(context) == _rhs.evaluate(context);
 				break;
 			case '!=':
-				result = _lhs.evaluate(neighborStateDistribution) != _rhs.evaluate(neighborStateDistribution);
+				result = _lhs.evaluate(context) != _rhs.evaluate(context);
 				break;
 			case '<':
-				result = _lhs.evaluate(neighborStateDistribution) < _rhs.evaluate(neighborStateDistribution);
+				result = _lhs.evaluate(context) < _rhs.evaluate(context);
 				break;
 			case '>':
-				result = _lhs.evaluate(neighborStateDistribution) > _rhs.evaluate(neighborStateDistribution);
+				result = _lhs.evaluate(context) > _rhs.evaluate(context);
 				break;
 			case '<=':
-				result = _lhs.evaluate(neighborStateDistribution) <= _rhs.evaluate(neighborStateDistribution);
+				result = _lhs.evaluate(context) <= _rhs.evaluate(context);
 				break;
 			case '>=':
-				result = _lhs.evaluate(neighborStateDistribution) >= _rhs.evaluate(neighborStateDistribution);
+				result = _lhs.evaluate(context) >= _rhs.evaluate(context);
 				break;
 			case '&&':
-				result = (_lhs.evaluate(neighborStateDistribution) != 0) && (_rhs.evaluate(neighborStateDistribution) != 0);
+				result = (_lhs.evaluate(context) != 0) && (_rhs.evaluate(context) != 0);
 				break;
 			case '||':
-				result = (_lhs.evaluate(neighborStateDistribution) != 0) || (_rhs.evaluate(neighborStateDistribution) != 0);
+				result = (_lhs.evaluate(context) != 0) || (_rhs.evaluate(context) != 0);
 				break;
 			default:
 				throw new Error();
@@ -53,14 +53,30 @@ class StateConditionNode implements ConditionNode {
 
 	StateConditionNode(this._state);
 
-	int evaluate(Map<String, int> neighborStateDistribution) {
-		if (neighborStateDistribution.containsKey(_state))
-			return neighborStateDistribution[_state];
+	int evaluate(ConditionContext context) {
+		if (context.neighborStateDistribution.containsKey(_state))
+			return context.neighborStateDistribution[_state];
 		else
 			return 0;
 	}
 
 	bool operator ==(Object obj) => (obj is StateConditionNode) && (obj._state == _state);
+}
+
+class AgeConditionNode implements ConditionNode {
+  int evaluate(ConditionContext context) {
+    return context.age;
+  }
+
+  bool operator ==(Object obj) => (obj is AgeConditionNode);
+}
+
+class GenerationConditionNode implements ConditionNode {
+  int evaluate(ConditionContext context) {
+    return context.generation;
+  }
+
+  bool operator ==(Object obj) => (obj is GenerationConditionNode);
 }
 
 class NumberConditionNode implements ConditionNode {
@@ -70,7 +86,7 @@ class NumberConditionNode implements ConditionNode {
 		_value = int.parse(value);
 	}
 
-	int evaluate(Map<String, int> neighborStateDistribution) {
+	int evaluate(ConditionContext context) {
 		return _value;
 	}
 

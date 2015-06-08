@@ -80,6 +80,15 @@ class ConditionParser {
 		switch (token.type) {
 			case ConditionToken.STATE_TYPE:
 				return new StateConditionNode(token.text);
+      case ConditionToken.VARIABLE_TYPE:
+        String upperCaseText = token.text.toUpperCase();
+
+        if (upperCaseText == "{AGE}")
+          return new AgeConditionNode();
+        else if (upperCaseText == "{GEN}")
+          return new GenerationConditionNode();
+
+        throw new ParsingException("Invalid variable reference '" + token.text + "'");
 			case ConditionToken.NUMBER_TYPE:
 				return new NumberConditionNode(token.text);
 			case ConditionToken.LPAREN_TYPE:

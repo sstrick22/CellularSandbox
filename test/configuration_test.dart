@@ -39,6 +39,7 @@ void main() {
 	String condition1 = "DEAD == 0";
 	String condition2 = "LIVE < 2 || LIVE > 3";
 	String condition3 = "(LIVE >= 3 && DEAD == 0) || (LIVE <= 2 && IMMORTAL != 0)";
+  String condition4 = "{aGe} > 0 && {GEN} < 100 && LIVE == 3";
 
 	group('Condition lexing', () {
 		test(condition1, () {
@@ -88,6 +89,23 @@ void main() {
 				]
 			));
 		});
+    test(condition4, () {
+      expect(life.ConditionLexer.lexCondition(condition4), orderedEquals(
+          [
+            new life.ConditionToken(life.ConditionToken.VARIABLE_TYPE, "{aGe}"),
+            new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, ">"),
+            new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "0"),
+            new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "&&"),
+            new life.ConditionToken(life.ConditionToken.VARIABLE_TYPE, "{GEN}"),
+            new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "<"),
+            new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "100"),
+            new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "&&"),
+            new life.ConditionToken(life.ConditionToken.STATE_TYPE, "LIVE"),
+            new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "=="),
+            new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "3")
+          ]
+      ));
+    });
 	});
 
 	group('Condition parsing', () {
@@ -150,5 +168,30 @@ void main() {
 				)
 			));
 		});
+    test(condition4, () {
+      expect(life.ConditionParser.parseCondition(life.ConditionLexer.lexCondition(condition4)), equals(
+          new life.OperatorConditionNode(
+              new life.OperatorConditionNode(
+                  new life.OperatorConditionNode(
+                    new life.AgeConditionNode(),
+                    ">",
+                    new life.NumberConditionNode("0")
+                  ),
+                  "&&",
+                  new life.OperatorConditionNode(
+                    new life.GenerationConditionNode(),
+                    "<",
+                    new life.NumberConditionNode("100")
+                  )
+              ),
+              "&&",
+              new life.OperatorConditionNode(
+                  new life.StateConditionNode("LIVE"),
+                  "==",
+                  new life.NumberConditionNode("3")
+              )
+          )
+      ));
+    });
 	});
 }

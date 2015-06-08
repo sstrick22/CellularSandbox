@@ -3,6 +3,7 @@ part of life;
 class ConditionToken {
 	static const String NUMBER_TYPE = "number";
 	static const String STATE_TYPE = "state";
+  static const String VARIABLE_TYPE = "variable";
 	static const String OPERATOR_TYPE = "operator";
 	static const String LPAREN_TYPE = "lparen";
 	static const String RPAREN_TYPE = "rparen";

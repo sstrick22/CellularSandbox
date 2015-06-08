@@ -52,6 +52,22 @@ class ConditionLexer {
 		return new ConditionToken(ConditionToken.STATE_TYPE, input.text.substring(startPos, input.pos));
 	}
 
+  static ConditionToken lexVariable(LexerInput input) {
+    int startPos = input.pos;
+
+    while (!input.end() && input.current() != '}') {
+      input.consume();
+    }
+
+    if (input.end())
+      throw new LexingException("Variable reference missing end '}'");
+
+    // Consume the end brace
+    input.consume();
+
+    return new ConditionToken(ConditionToken.VARIABLE_TYPE, input.text.substring(startPos, input.pos));
+  }
+
 	static ConditionToken lexSymbol(LexerInput input) {
 		int startPos = input.pos;
 
@@ -74,7 +90,9 @@ class ConditionLexer {
 		} else if (char == ')') {
 			input.consume();
 			return new ConditionToken(ConditionToken.RPAREN_TYPE, ')');
-		}
+		} else if (char == '{') {
+      return lexVariable(input);
+    }
 
 		if (input.end())
 			throw new LexingException("Unexpected end of condition");
