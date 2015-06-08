@@ -25,18 +25,27 @@ Any string of letters (a-z,A-Z) matching a state specified in the current config
 Resolves to the **number** of neighbors of the current cell that are in the state represented 
 by this string.
 
-#### ~~Temporal Variables~~ (Coming Soon)
-One of the strings `[AGE]` and `[GEN]` (case insensitive).  
-`[AGE]`: Resolves to the **number** of consecutive generations prior to the current generation
+#### ~~Temporal Variables~~ (Coming Soon!)
+One of the strings `{AGE}` and `{GEN}` (case insensitive).  
+`{AGE}`: Resolves to the **number** of consecutive generations prior to the current generation
 where the current cell was in its current state.  
-`[GEN]`: Resolves to the **number** of generations that have passed since the first generation 
+`{GEN}`: Resolves to the **number** of generations that have passed since the first generation 
 (in other words, the current generation).
 
 ### Operators
 
+#### ~~Airthmetic Operators~~ (Coming Soon!)
+One of the strings `+`, `-`, `*`, `/`, and `%`. These are binary operators that expect two 
+**number** arguments and resolve to a **number**.  
+`+`: Resolves to the sum of the two arguments.  
+`-`: Resolves to the lhs minus the rhs.  
+`*`: Resolves to the product of the two arguments.  
+`/`: Resolves to the lhs divided by the rhs (integer division).  
+`%`: Resolves to the remainder of dividing the lhs by the rhs (integer division).  
+
 #### Comparison Operators
 One of the strings `==`, `!=`, `<`, `>`, `<=`, and `>=`. These are binary operators that expect two 
-*number* arguments.
+*number* arguments and resolve to a **bool**.
 `==`: Resolves to a **bool** indicating whether the two arguments are equal.  
 `!=`: Resolves to a **bool** indicating whether the two arguments are not equal.  
 `<`: Resolves to a **bool** indicating whether the lhs is less than the rhs.  
@@ -45,19 +54,28 @@ One of the strings `==`, `!=`, `<`, `>`, `<=`, and `>=`. These are binary operat
 `>=`: Resolves to a **bool** indicating whether the lhs is greater than or equal to the rhs.  
 
 #### Logical Operators
-One of the strings `||` and `&&`. These are binary operators that expect two **bool** arguments.  
+One of the strings `||` and `&&`. These are binary operators that expect two **bool** arguments
+and resolve to a **bool**.  
 `||`: Resolves to a **bool** indicating whether at least one of the arguments is true.  
 `&&`: Resolves to a **bool** indicating whether both of the arguments are true.
 
+#### Argument Conversion
 Operators will convert arguments of the wrong type to the right type according to the following 
 conversions:
 - **number** to **bool**: The number 0 is converted to false, all other numbers are converted to true.
 - **bool** to **number**: The bool false is converted to 0 and the bool true is converted to 1.
 
-The comparison operators have a higher precedence than the logical operators.  That means in a 
-condition such as `LIVE == 3 || DEAD > 5`, the comparision operators `==` and `>` will be evaluated 
-before the logical operator `||`.  Consecutive operators in the same class will be evaluated left to 
-right.
+#### Order of Operations
+The operators have verious levels of precedence, which can determine their order of evaluation.  
+- Level 1: `*`, `/`, `%`  
+- Level 2: `+`, `-` 
+- Level 3: `==`, `!=`, `<`, `>`, `<=`, `>=`  
+- Level 4: `||`, `&&`  
+
+That means that a condition such as `LIVE == DEAD + 1 * 2 || DEAD > 5` will be interpreted as 
+`((LIVE == (DEAD + (1 * 2))) || (DEAD > 5))`. Explicitly type parenthesis into your condition 
+formula to override this behavior. Consecutive operators in the same level will be evaluated 
+left to right.
 
 ## Transition
 
