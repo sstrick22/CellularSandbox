@@ -14,36 +14,37 @@ class OperatorConditionNode implements ConditionNode {
 	OperatorConditionNode(this._lhs, this._operator, this._rhs);
 
 	int evaluate(ConditionContext context) {
-		bool result;
+    int lhs = _lhs.evaluate(context), rhs = _rhs.evaluate(context);
 		switch (_operator) {
 			case '==':
-				result = _lhs.evaluate(context) == _rhs.evaluate(context);
-				break;
+				return lhs == rhs ? 1 : 0;
 			case '!=':
-				result = _lhs.evaluate(context) != _rhs.evaluate(context);
-				break;
+        return lhs != rhs ? 1 : 0;
 			case '<':
-				result = _lhs.evaluate(context) < _rhs.evaluate(context);
-				break;
+        return lhs < rhs ? 1 : 0;
 			case '>':
-				result = _lhs.evaluate(context) > _rhs.evaluate(context);
-				break;
+        return lhs > rhs ? 1 : 0;
 			case '<=':
-				result = _lhs.evaluate(context) <= _rhs.evaluate(context);
-				break;
+        return lhs <= rhs ? 1 : 0;
 			case '>=':
-				result = _lhs.evaluate(context) >= _rhs.evaluate(context);
-				break;
+        return lhs >= rhs ? 1 : 0;
+      case '+':
+        return lhs + rhs;
+      case '-':
+        return lhs - rhs;
+      case '*':
+        return lhs * rhs;
+      case '/':
+        return lhs ~/ rhs;
+      case '%':
+        return lhs % rhs;
 			case '&&':
-				result = (_lhs.evaluate(context) != 0) && (_rhs.evaluate(context) != 0);
-				break;
+				return _lhs != 0 && _rhs != 0 ? 1 : 0;
 			case '||':
-				result = (_lhs.evaluate(context) != 0) || (_rhs.evaluate(context) != 0);
-				break;
+        return _lhs != 0 || _rhs != 0 ? 1 : 0;
 			default:
 				throw new Error();
 		}
-		return result ? 1 : 0;
 	}
 
 	bool operator ==(Object obj) => (obj is OperatorConditionNode) && (obj._operator == _operator) && (obj._lhs == _lhs) && (obj._rhs == _rhs);

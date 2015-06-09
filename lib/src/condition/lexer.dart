@@ -81,9 +81,12 @@ class ConditionLexer {
 			input.consumeChar('=');
 			return new ConditionToken(ConditionToken.OPERATOR_TYPE, input.text.substring(startPos, input.pos));
 		} else if (char == '&' || char == '|') {
-			input.consume();
-			if (input.consumeChar(char))
-				return new ConditionToken(ConditionToken.OPERATOR_TYPE, input.text.substring(startPos, input.pos));
+      input.consume();
+      if (input.consumeChar(char))
+        return new ConditionToken(ConditionToken.OPERATOR_TYPE, input.text.substring(startPos, input.pos));
+    } else if (char == '+' || char == '-' || char == '*' || char == '/' || char == '%') {
+      input.consume();
+      return new ConditionToken(ConditionToken.OPERATOR_TYPE, input.text.substring(startPos, input.pos));
 		} else if (char == '(') {
 			input.consume();
 			return new ConditionToken(ConditionToken.LPAREN_TYPE, '(');

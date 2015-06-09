@@ -6,8 +6,9 @@ class ParsingException extends ConfigurationException {
 
 class ConditionParser {
 	// These are the different classes of binary operators used for order of operation.
-	static Set<String> BOOLEAN_OPERATORS = new Set.from(["&&", "||"]);
+	static Set<String> LOGICAL_OPERATORS = new Set.from(["&&", "||"]);
 	static Set<String> COMPARISON_OPERATORS = new Set.from(["==", "!=", "<", ">", "<=", ">="]);
+  static Set<String> ARITHMETIC_OPERATORS = new Set.from(["+", "-", "*", "/", "%"]);
 
 	static ConditionNode parseCondition(List<ConditionToken> tokens) {
 		ParserInput input = new ParserInput(tokens);
@@ -20,16 +21,20 @@ class ConditionParser {
 	}
 
 	static ConditionNode parseExpression(ParserInput input) {
-		return parseBooleanOperator(input);
+		return parseLogicalOperator(input);
 	}
 
-	static ConditionNode parseBooleanOperator(ParserInput input) {
-		return parseBinaryOperator(input, parseComparisonOperator, BOOLEAN_OPERATORS);
+	static ConditionNode parseLogicalOperator(ParserInput input) {
+		return parseBinaryOperator(input, parseComparisonOperator, LOGICAL_OPERATORS);
 	}
 
 	static ConditionNode parseComparisonOperator(ParserInput input) {
-		return parseBinaryOperator(input, parseTerm, COMPARISON_OPERATORS);
+		return parseBinaryOperator(input, parseArithmeticOperator, COMPARISON_OPERATORS);
 	}
+
+  static ConditionNode parseArithmeticOperator(ParserInput input) {
+    return parseBinaryOperator(input, parseTerm, ARITHMETIC_OPERATORS);
+  }
 
 	static ConditionNode parseBinaryOperator(ParserInput input, ConditionNode parseSubtree(ParserInput input), Set<String> operators) {
 		ConditionNode lhs = parseSubtree(input);
