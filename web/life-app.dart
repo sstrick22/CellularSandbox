@@ -35,6 +35,7 @@ class LifeApp extends PolymerElement {
     Timer advanceTimer;
 
     @observable bool playing = false;
+    @observable int generation = 0;
     @observable String configurationName = "";
 	@observable List<String> states = toObservable([]);
     int _lastClickedRow = -1, _lastClickedCol = -1;
@@ -74,6 +75,7 @@ class LifeApp extends PolymerElement {
 
     	try {
     		config = new Configuration.fromJson(json);
+        generation = 0;
     		configurationName = config.name;
     		states..clear()..addAll(config.states);
 
@@ -151,6 +153,7 @@ class LifeApp extends PolymerElement {
 
     void _clearClickHandler(MouseEvent e) {
     	grid.clear();
+      generation = 0;
     	graphics.drawCells(grid, foregroundCanvas.context2D);
     }
 
@@ -191,7 +194,7 @@ class LifeApp extends PolymerElement {
     }
 
     void _advance() {
-    	grid.advance(config.stateTransitionMap);
+    	generation = grid.advance(config.stateTransitionMap);
     	graphics.drawCells(grid, foregroundCanvas.context2D);
 
     	if (playing)

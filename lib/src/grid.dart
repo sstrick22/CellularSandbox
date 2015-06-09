@@ -39,7 +39,7 @@ class Grid {
 		_cells[row][col].state = state;
 	}
 
-	void advance(Map<String, List<Transition>> stateTransitionMap) {
+	int advance(Map<String, List<Transition>> stateTransitionMap) {
 		// Determine the next states
 		Map<String, int> neighborStateDistribution = new Map<String, int>();
 		for (int row = 0; row < _rows; row++) {
@@ -90,7 +90,7 @@ class Grid {
 		_nextCellBuffer = oldCells;
 
     // Advance the generation
-    _generation++;
+    return ++_generation;
 	}
 
 	void clear() {
