@@ -157,4 +157,6 @@ class Configuration {
 
 		return true;
 	}
+
+  int get hashCode => hashObjects([_name, _defaultState, _states, _stateColorMap, _stateTransitionMap]);
 }

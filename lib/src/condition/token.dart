@@ -16,4 +16,5 @@ class ConditionToken {
 	ConditionToken(this._type, this._text);
 
 	bool operator ==(Object obj) => (obj is ConditionToken) && (obj._type == _type) && (obj._text == _text);
+  int get hashCode => hash2(_type, _text);
 }

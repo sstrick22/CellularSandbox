@@ -1,6 +1,7 @@
 name: life
 description: A customizable cellular automata sandbox
 dependencies:
+  quiver: ">=0.21.0 <0.22.0"
   polymer: ">=0.16.0 <0.17.0"
   core_elements: ">=0.6.0"
   paper_elements: ">=0.6.0"
