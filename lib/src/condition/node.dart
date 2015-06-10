@@ -15,34 +15,33 @@ class OperatorConditionNode implements ConditionNode {
 	OperatorConditionNode(this._lhs, this._operator, this._rhs);
 
 	int evaluate(ConditionContext context) {
-		int lhsResult = _lhs.evaluate(context), rhsResult = _rhs.evaluate(context);
 		switch (_operator) {
 			case '==':
-				return lhsResult == rhsResult ? 1 : 0;
+				return _lhs.evaluate(context) == _rhs.evaluate(context) ? 1 : 0;
 			case '!=':
-				return lhsResult != rhsResult ? 1 : 0;
+				return _lhs.evaluate(context) != _rhs.evaluate(context) ? 1 : 0;
 			case '<':
-				return lhsResult < rhsResult ? 1 : 0;
+				return _lhs.evaluate(context) < _rhs.evaluate(context) ? 1 : 0;
 			case '>':
-				return lhsResult > rhsResult ? 1 : 0;
+				return _lhs.evaluate(context) > _rhs.evaluate(context) ? 1 : 0;
 			case '<=':
-				return lhsResult <= rhsResult ? 1 : 0;
+				return _lhs.evaluate(context) <= _rhs.evaluate(context) ? 1 : 0;
 			case '>=':
-				return lhsResult >= rhsResult ? 1 : 0;
+				return _lhs.evaluate(context) >= _rhs.evaluate(context) ? 1 : 0;
 			case '+':
-				return lhsResult + rhsResult;
+				return _lhs.evaluate(context) + _rhs.evaluate(context);
 			case '-':
-				return lhsResult - rhsResult;
+				return _lhs.evaluate(context) - _rhs.evaluate(context);
 			case '*':
-				return lhsResult * rhsResult;
+				return _lhs.evaluate(context) * _rhs.evaluate(context);
 			case '/':
-				return lhsResult ~/ rhsResult;
+				return _lhs.evaluate(context) ~/ _rhs.evaluate(context);
 			case '%':
-				return lhsResult % rhsResult;
+				return _lhs.evaluate(context) % _rhs.evaluate(context);
 			case '&&':
-				return ((lhsResult != 0) && (rhsResult != 0)) ? 1 : 0;
+				return _lhs.evaluate(context) != 0 && _rhs.evaluate(context) != 0 ? 1 : 0;
 			case '||':
-				return ((lhsResult != 0) || (rhsResult != 0)) ? 1 : 0;
+				return _lhs.evaluate(context) != 0 || _rhs.evaluate(context) != 0 ? 1 : 0;
 			default:
 				throw new Error();
 		}
