@@ -1,54 +1,54 @@
 {
-  "name": "Cycle",
-  "states": [
-    {
-      "name": "DEAD",
-      "color": "#808080",
-      "transitions": [
-        {
-          "condition": "ROCK",
-          "next": "ROCK"
-        },
-        {
-          "condition": "PAPER",
-          "next": "PAPER"
-        },
-        {
-          "condition": "SCISSORS",
-          "next": "SCISSORS"
-        }
-      ]
-    },
-    {
-      "name": "ROCK",
-      "color": "#FF0000",
-      "transitions": [
-        {
-          "condition": "PAPER",
-          "next": "PAPER"
-        }
-      ]
-    },
-    {
-      "name": "PAPER",
-      "color": "#00FF00",
-      "transitions": [
-        {
-          "condition": "SCISSORS",
-          "next": "SCISSORS"
-        }
-      ]
-    },
-    {
-      "name": "SCISSORS",
-      "color": "#0000FF",
-      "transitions": [
-        {
-          "condition": "ROCK",
-          "next": "ROCK"
-        }
-      ]
-    }
-  ],
-  "default": "DEAD"
+	"name": "Cycle",
+	"states": [
+		{
+			"name": "DEAD",
+			"color": "#808080",
+			"transitions": [
+				{
+					"condition": "ROCK",
+					"next": "ROCK"
+				},
+				{
+					"condition": "PAPER",
+					"next": "PAPER"
+				},
+				{
+					"condition": "SCISSORS",
+					"next": "SCISSORS"
+				}
+			]
+		},
+		{
+			"name": "ROCK",
+			"color": "#FF0000",
+			"transitions": [
+				{
+					"condition": "PAPER",
+					"next": "PAPER"
+				}
+			]
+		},
+		{
+			"name": "PAPER",
+			"color": "#00FF00",
+			"transitions": [
+				{
+					"condition": "SCISSORS",
+					"next": "SCISSORS"
+				}
+			]
+		},
+		{
+			"name": "SCISSORS",
+			"color": "#0000FF",
+			"transitions": [
+				{
+					"condition": "ROCK",
+					"next": "ROCK"
+				}
+			]
+		}
+	],
+	"default": "DEAD"
 }

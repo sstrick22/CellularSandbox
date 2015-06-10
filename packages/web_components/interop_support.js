@@ -35,7 +35,7 @@
 
     var original = proto.createdCallback;
     var newCallback = function() {
-      original.call(this);
+      if (original) original.call(this);
       var name = (this.getAttribute('is') || this.localName).toLowerCase();
       var upgrader = upgraders[name];
       if (upgrader) {
@@ -114,8 +114,8 @@
           if (match) {
             return match[1];
           }
-          return originalGetUnknownTag(o, tag);
         }
+        return originalGetUnknownTag(o, tag);
       };
     });
   }

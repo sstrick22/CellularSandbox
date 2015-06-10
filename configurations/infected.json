@@ -1,40 +1,40 @@
 {
-  "name": "Infected",
-  "states": [
-    {
-      "name": "DEAD",
-      "color": "#808080",
-      "transitions": [
-        {
-          "condition": "LIVE == 3",
-          "next": "LIVE"
-        }
-      ]
-    },
-    {
-      "name": "LIVE",
-      "color": "#FFFF00",
-      "transitions": [
-        {
-          "condition": "INFECTED",
-          "next": "INFECTED"
-        },
-        {
-          "condition": "LIVE < 2 || LIVE > 3",
-          "next": "DEAD"
-        }
-      ]
-    },
-    {
-      "name": "INFECTED",
-      "color": "#00FF00",
-      "transitions": [
-        {
-          "condition": "LIVE == 0",
-          "next": "DEAD"
-        }
-      ]
-    }
-  ],
-  "default": "DEAD"
+	"name": "Infected",
+	"states": [
+		{
+			"name": "DEAD",
+			"color": "#808080",
+			"transitions": [
+				{
+					"condition": "LIVE == 3",
+					"next": "LIVE"
+				}
+			]
+		},
+		{
+			"name": "LIVE",
+			"color": "#FFFF00",
+			"transitions": [
+				{
+					"condition": "INFECTED",
+					"next": "INFECTED"
+				},
+				{
+					"condition": "LIVE < 2 || LIVE > 3",
+					"next": "DEAD"
+				}
+			]
+		},
+		{
+			"name": "INFECTED",
+			"color": "#00FF00",
+			"transitions": [
+				{
+					"condition": "{AGE} >= 3",
+					"next": "DEAD"
+				}
+			]
+		}
+	],
+	"default": "DEAD"
 }
