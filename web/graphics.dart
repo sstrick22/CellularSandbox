@@ -1,4 +1,5 @@
-part of life;
+import '../lib/life.dart';
+import 'dart:html' show CanvasRenderingContext2D;
 
 class Graphics {
 	static const int CELL_SIZE = 4;
@@ -10,13 +11,16 @@ class Graphics {
 	String _defaultColor;
 
 	int get rows => _rows;
+
 	int get cols => _cols;
+
 	int get width => _width;
+
 	int get height => _height;
 
 	Graphics(this._rows, this._cols, this._stateColorMap, this._defaultColor) {
 		_width = (_cols * CELL_SIZE) + ((_cols + 1) * LINE_SIZE);
-        _height = (_rows * CELL_SIZE) + ((_rows + 1) * LINE_SIZE);
+		_height = (_rows * CELL_SIZE) + ((_rows + 1) * LINE_SIZE);
 	}
 
 	int getRowFromCoord(int y) {
@@ -62,16 +66,15 @@ class Graphics {
 	}
 
 	void drawCells(Grid grid, CanvasRenderingContext2D context) {
-		context.clearRect(0,  0, _width, _height);
+		context.clearRect(0, 0, _width, _height);
 
 		String color;
 		for (int row = 0, y = LINE_SIZE; row < _rows; row++, y += PERIOD) {
 			for (int col = 0, x = LINE_SIZE; col < _cols; col++, x += PERIOD) {
 				color = _stateColorMap[grid.getState(row, col)];
-				if (color != _defaultColor)
-				{
-	        		context.fillStyle = color;
-	        		context.fillRect(x, y, CELL_SIZE, CELL_SIZE);
+				if (color != _defaultColor) {
+					context.fillStyle = color;
+					context.fillRect(x, y, CELL_SIZE, CELL_SIZE);
 				}
 			}
 		}

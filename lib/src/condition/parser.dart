@@ -6,8 +6,10 @@ class ParsingException extends ConfigurationException {
 
 class ConditionParser {
 	// These are the different classes of binary operators used for order of operation.
-	static Set<String> BOOLEAN_OPERATORS = new Set.from(["&&", "||"]);
+	static Set<String> LOGICAL_OPERATORS = new Set.from(["&&", "||"]);
 	static Set<String> COMPARISON_OPERATORS = new Set.from(["==", "!=", "<", ">", "<=", ">="]);
+	static Set<String> ADDITIVE_OPERATORS = new Set.from(["+", "-"]);
+	static Set<String> MULTIPLICATIVE_OPERATORS = new Set.from(["*", "/", "%"]);
 
 	static ConditionNode parseCondition(List<ConditionToken> tokens) {
 		ParserInput input = new ParserInput(tokens);
@@ -20,25 +22,35 @@ class ConditionParser {
 	}
 
 	static ConditionNode parseExpression(ParserInput input) {
-		return parseBooleanOperator(input);
+		return parseLogicalOperator(input);
 	}
 
-	static ConditionNode parseBooleanOperator(ParserInput input) {
-		return parseBinaryOperator(input, parseComparisonOperator, BOOLEAN_OPERATORS);
+	static ConditionNode parseLogicalOperator(ParserInput input) {
+		return parseBinaryOperator(input, parseComparisonOperator, LOGICAL_OPERATORS);
 	}
 
 	static ConditionNode parseComparisonOperator(ParserInput input) {
-		return parseBinaryOperator(input, parseTerm, COMPARISON_OPERATORS);
+		return parseBinaryOperator(input, parseAdditiveOperator, COMPARISON_OPERATORS);
 	}
 
-	static ConditionNode parseBinaryOperator(ParserInput input, ConditionNode parseSubtree(ParserInput input), Set<String> operators) {
+	static ConditionNode parseAdditiveOperator(ParserInput input) {
+		return parseBinaryOperator(input, parseMultiplicativeOperator, ADDITIVE_OPERATORS);
+	}
+
+	static ConditionNode parseMultiplicativeOperator(ParserInput input) {
+		return parseBinaryOperator(input, parseTerm, MULTIPLICATIVE_OPERATORS);
+	}
+
+	static ConditionNode parseBinaryOperator(ParserInput input,
+		ConditionNode parseSubtree(ParserInput input), Set<String> operators) {
 		ConditionNode lhs = parseSubtree(input);
 
 		ConditionToken operatorToken = input.next();
 		if (operatorToken == null)
 			return lhs;
 
-		if (operatorToken.type != ConditionToken.OPERATOR_TYPE || !operators.contains(operatorToken.text)) {
+		if (operatorToken.type != ConditionToken.OPERATOR_TYPE ||
+		!operators.contains(operatorToken.text)) {
 			input.stepBack();
 			return lhs;
 		}
@@ -60,10 +72,11 @@ class ConditionParser {
 			if (operatorToken == null)
 				break;
 
-			if (operatorToken.type != ConditionToken.OPERATOR_TYPE || !operators.contains(operatorToken.text)) {
-    			input.stepBack();
-    			break;
-    		}
+			if (operatorToken.type != ConditionToken.OPERATOR_TYPE ||
+			!operators.contains(operatorToken.text)) {
+				input.stepBack();
+				break;
+			}
 
 			// We have another operator expression for which to parse the rhs
 			lhs = result;
@@ -80,6 +93,15 @@ class ConditionParser {
 		switch (token.type) {
 			case ConditionToken.STATE_TYPE:
 				return new StateConditionNode(token.text);
+			case ConditionToken.VARIABLE_TYPE:
+				String upperCaseText = token.text.toUpperCase();
+
+				if (upperCaseText == "{AGE}")
+					return new AgeConditionNode();
+				else if (upperCaseText == "{GEN}")
+					return new GenerationConditionNode();
+
+				throw new ParsingException("Invalid variable reference '" + token.text + "'");
 			case ConditionToken.NUMBER_TYPE:
 				return new NumberConditionNode(token.text);
 			case ConditionToken.LPAREN_TYPE:

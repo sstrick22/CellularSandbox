@@ -1,26 +1,26 @@
 {
-  "name": "Conway's Game of Life",
-  "states": [
-    {
-      "name": "DEAD",
-      "color": "#808080",
-      "transitions": [
-        {
-          "condition": "LIVE == 3",
-          "next": "LIVE"
-        }
-      ]
-    },
-    {
-      "name": "LIVE",
-      "color": "#FFFF00",
-      "transitions": [
-        {
-          "condition": "LIVE < 2 || LIVE > 3",
-          "next": "DEAD"
-        }
-      ]
-    }
-  ],
-  "default": "DEAD"
+	"name": "Conway's Game of Life",
+	"states": [
+		{
+			"name": "DEAD",
+			"color": "#808080",
+			"transitions": [
+				{
+					"condition": "LIVE == 3",
+					"next": "LIVE"
+				}
+			]
+		},
+		{
+			"name": "LIVE",
+			"color": "#FFFF00",
+			"transitions": [
+				{
+					"condition": "LIVE < 2 || LIVE > 3",
+					"next": "DEAD"
+				}
+			]
+		}
+	],
+	"default": "DEAD"
 }

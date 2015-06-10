@@ -1,33 +1,47 @@
 {
-  "name": "Genesis 1:10",
-  "states": [
-    {
-      "name": "DEAD",
-      "color": "#808080",
-      "transitions": [
-        {
-          "condition": "LIVE == 3",
-          "next": "LIVE"
-        },
-        {
-          "condition": "LIVE == 0",
-          "next": {
-            "LIVE": 1,
-            "DEAD": 9
-          }
-        }
-      ]
-    },
-    {
-      "name": "LIVE",
-      "color": "#FFFF00",
-      "transitions": [
-        {
-          "condition": "LIVE < 2 || LIVE > 3",
-          "next": "DEAD"
-        }
-      ]
-    }
-  ],
-  "default": "DEAD"
+	"name": "Genesis",
+	"states": [
+		{
+			"name": "DEAD",
+			"color": "#808080",
+			"transitions": [
+				{
+					"condition": "LIVE == 3",
+					"next": "LIVE"
+				},
+				{
+					"condition": "{GEN} < 100 && LIVE == 0",
+					"next": {
+						"LIVE": 1,
+						"DEAD": 49
+					}
+				},
+				{
+					"condition": "{GEN} < 500 && LIVE == 0",
+					"next": {
+						"LIVE": 1,
+						"DEAD": 99
+					}
+				},
+				{
+					"condition": "{GEN} < 1000 && LIVE == 0",
+					"next": {
+						"LIVE": 1,
+						"DEAD": 199
+					}
+				}
+			]
+		},
+		{
+			"name": "LIVE",
+			"color": "#FFFF00",
+			"transitions": [
+				{
+					"condition": "LIVE < 2 || LIVE > 3",
+					"next": "DEAD"
+				}
+			]
+		}
+	],
+	"default": "DEAD"
 }

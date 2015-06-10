@@ -5,11 +5,15 @@ class Transition {
 	NextStateGenerator _next;
 
 	Condition get condition => _condition;
+
 	NextStateGenerator get next => _next;
 
 	Transition(this._condition, this._next);
 
-	bool operator ==(Object obj) => (obj is Transition) && (obj._condition.condition == _condition.condition) && (obj._next == _next);
+	bool operator ==(Object obj) => (obj is Transition) &&
+	(obj._condition.condition == _condition.condition) && (obj._next == _next);
+
+	int get hashCode => hash2(_condition, _next);
 }
 
 abstract class NextStateGenerator {
@@ -26,6 +30,8 @@ class ConstantNextStateGenerator implements NextStateGenerator {
 	}
 
 	bool operator ==(Object obj) => (obj is ConstantNextStateGenerator) && (obj._state == _state);
+
+	int get hashCode => _state.hashCode;
 }
 
 class RandomNextStateGenerator implements NextStateGenerator {
@@ -68,4 +74,6 @@ class RandomNextStateGenerator implements NextStateGenerator {
 
 		return true;
 	}
+
+	int get hashCode => hash2(_stateWeightMap, _totalWeight);
 }

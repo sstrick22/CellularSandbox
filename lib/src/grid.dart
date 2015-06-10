@@ -1,48 +1,62 @@
 part of life;
 
+class Cell {
+	String state;
+	int age;
+
+	Cell(this.state) {
+		age = 0;
+	}
+}
+
 class Grid {
-	int _rows, _cols;
+	int _rows, _cols, _generation;
 	String _defaultState;
-	List<List<String>> _states;
-	List<List<String>> _nextStateBuffer;
+	List<List<Cell>> _cells;
+	List<List<Cell>> _nextCellBuffer;
 
 	int get rows => _rows;
+
 	int get cols => _cols;
 
+	int get generation => _generation;
+
 	Grid(this._rows, this._cols, this._defaultState) {
-		_states = new List<List<String>>.generate(_rows, (int) => new List<String>.filled(_cols, _defaultState));
-		_nextStateBuffer = new List<List<String>>.generate(_rows, (int) => new List<String>.filled(_cols, _defaultState));
-	}
-
-	bool hasChanged(int row, int col) {
-		if (row < 0 || row >= _rows || col < 0 || col >= _cols)
-			return false;
-
-		return _states[row][col] != _nextStateBuffer[row][col];
+		_generation = 0;
+		_cells = new List<List<Cell>>.generate(_rows,
+			(int) => new List<Cell>.generate(_cols, (int) => new Cell(_defaultState)));
+		_nextCellBuffer = new List<List<Cell>>.generate(_rows,
+			(int) => new List<Cell>.generate(_cols, (int) => new Cell(_defaultState)));
 	}
 
 	String getState(int row, int col) {
 		if (row < 0 || row >= _rows || col < 0 || col >= _cols)
 			return _defaultState;
 
-		return _states[row][col];
+		return _cells[row][col].state;
 	}
 
 	void setState(int row, int col, String state) {
 		if (row < 0 || row >= _rows || col < 0 || col >= _cols)
 			throw new Error();
 
-		_states[row][col] = state;
+		_cells[row][col].state = state;
 	}
 
-	void advance(Map<String, List<Transition>> stateTransitionMap) {
+	int advance(Map<String, List<Transition>> stateTransitionMap) {
 		// Determine the next states
 		Map<String, int> neighborStateDistribution = new Map<String, int>();
 		for (int row = 0; row < _rows; row++) {
 			for (int col = 0; col < _cols; col++) {
-				List<Transition> transitions = stateTransitionMap[_states[row][col]];
-				_nextStateBuffer[row][col] = _states[row][col];
+				// Check if age should be reset.
+				if (_nextCellBuffer[row][col].state != _cells[row][col].state)
+					_cells[row][col].age = 0;
 
+				// Set the next state to the current state.  This will matter if
+				// no transitions are taken.
+				_nextCellBuffer[row][col].state = _cells[row][col].state;
+
+				List<Transition> transitions = stateTransitionMap[_cells[row][col].state];
 				if (transitions.isNotEmpty) {
 					// Determine neighbor state distribution
 					neighborStateDistribution.clear();
@@ -59,50 +73,38 @@ class Grid {
 						}
 					}
 
-					// Determine next state
+					// Determine which transition to take, if any.
 					for (Transition transition in transitions) {
-						if (transition.condition.evaluate(neighborStateDistribution)) {
-							_nextStateBuffer[row][col] = transition.next.state();
+						if (transition.condition.evaluate(neighborStateDistribution,
+						_cells[row][col].age, _generation)) {
+							_nextCellBuffer[row][col].state = transition.next.state();
 							break;
 						}
 					}
 				}
+
+				// Check if age advanced during generation advance
+				if (_nextCellBuffer[row][col].state == _cells[row][col].state)
+					_nextCellBuffer[row][col].age = _cells[row][col].age + 1;
 			}
 		}
 
 		// Advance the states
-		List<List<String>> oldStates = _states;
-		_states = _nextStateBuffer;
-		_nextStateBuffer = oldStates;
+		List<List<Cell>> oldCells = _cells;
+		_cells = _nextCellBuffer;
+		_nextCellBuffer = oldCells;
+
+		// Advance the generation
+		return ++_generation;
 	}
 
 	void clear() {
-		_states.forEach((List<String> list) => list.fillRange(0, list.length, _defaultState));
-	}
-
-	Set<String> getInvalidStates(Set<String> validStates) {
-		Set<String> invalidStates = new Set<String>();
-		for (int row = 0; row < _rows; row++) {
-			for (int col = 0; col < _cols; col++) {
-				if (!validStates.contains(_states[row][col]))
-					invalidStates.add(_states[row][col]);
-
-				if (!validStates.contains(_nextStateBuffer[row][col]))
-					invalidStates.add(_nextStateBuffer[row][col]);
+		for (List<Cell> list in _cells) {
+			for (Cell cell in list) {
+				cell.state = _defaultState;
+				cell.age = 0;
 			}
 		}
-		return invalidStates;
-	}
-
-	void replaceStates(Map<String,String> stateMap) {
-		for (int row = 0; row < _rows; row++) {
-			for (int col = 0; col < _cols; col++) {
-				if (stateMap.containsKey(_states[row][col]))
-					_states[row][col] = stateMap[_states[row][col]];
-
-				if (stateMap.containsKey(_nextStateBuffer[row][col]))
-					_nextStateBuffer[row][col] = stateMap[_nextStateBuffer[row][col]];
-			}
-		}
+		_generation = 0;
 	}
 }
