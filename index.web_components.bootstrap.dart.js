@@ -8232,14 +8232,18 @@ v=a.m0()
 if(v==null||v.Q!=="rparen")throw H.b(Z.pj("Missing closing parenthesis"))
 return w}throw H.b(Z.pj("Missing term in expression"))},"$1","wV",2,0,99],
 cJ:{
-"^":"a;Q,a,b",
+"^":"a;Q,a,b,c",
 gdc:function(){return this.Q},
-zn:function(a,b,c){var z=this.b
+zn:function(a,b,c){var z,y
+z=this.b
 if(z==null)return!0
-else return!J.mG(z.BJ(new Z.NL(a,b,c)),0)}},
+y=this.c
+y.Q=a
+y.a=b
+y.b=c
+return!J.mG(z.BJ(y),0)}},
 NL:{
-"^":"a;Q,a,b",
-gLh:function(){return this.a}},
+"^":"a;Q,Lh:a@,b"},
 q7:{
 "^":"lA;Q",
 static:{XS:function(a){var z=new Z.q7(null)
@@ -8267,32 +8271,27 @@ hh:{
 "^":"a;"},
 eV:{
 "^":"a;Q,a,b",
-BJ:function(a){var z,y
-z=this.Q.BJ(a)
-y=this.a.BJ(a)
-switch(this.b){case"==":return J.mG(z,y)?1:0
-case"!=":return!J.mG(z,y)?1:0
-case"<":return J.UN(z,y)?1:0
-case">":return J.vU(z,y)?1:0
-case"<=":return J.Df(z,y)?1:0
-case">=":return J.u6(z,y)?1:0
-case"+":return J.WB(z,y)
-case"-":return J.aF(z,y)
-case"*":return J.lX(z,y)
-case"/":return J.xH(z,y)
-case"%":return J.FW(z,y)
-case"&&":return!J.mG(z,0)&&!J.mG(y,0)?1:0
-case"||":return!J.mG(z,0)||!J.mG(y,0)?1:0
+BJ:function(a){switch(this.b){case"==":return J.mG(this.Q.BJ(a),this.a.BJ(a))?1:0
+case"!=":return!J.mG(this.Q.BJ(a),this.a.BJ(a))?1:0
+case"<":return J.UN(this.Q.BJ(a),this.a.BJ(a))?1:0
+case">":return J.vU(this.Q.BJ(a),this.a.BJ(a))?1:0
+case"<=":return J.Df(this.Q.BJ(a),this.a.BJ(a))?1:0
+case">=":return J.u6(this.Q.BJ(a),this.a.BJ(a))?1:0
+case"+":return J.WB(this.Q.BJ(a),this.a.BJ(a))
+case"-":return J.aF(this.Q.BJ(a),this.a.BJ(a))
+case"*":return J.lX(this.Q.BJ(a),this.a.BJ(a))
+case"/":return J.xH(this.Q.BJ(a),this.a.BJ(a))
+case"%":return J.FW(this.Q.BJ(a),this.a.BJ(a))
+case"&&":return!J.mG(this.Q.BJ(a),0)&&!J.mG(this.a.BJ(a),0)?1:0
+case"||":return!J.mG(this.Q.BJ(a),0)||!J.mG(this.a.BJ(a),0)?1:0
 default:throw H.b(P.By())}},
 m:function(a,b){if(b==null)return!1
 return b instanceof Z.eV&&b.b===this.b&&J.mG(b.Q,this.Q)&&J.mG(b.a,this.a)},
 giO:function(a){return X.PI(X.Gz(X.Gz(X.Gz(0,J.v1(this.Q)),C.yo.giO(this.b)),J.v1(this.a)))}},
 RI:{
 "^":"a;Q",
-BJ:function(a){var z,y
-z=a.Q
-y=this.Q
-if(z.x4(y))return z.p(0,y)
+BJ:function(a){var z=this.Q
+if(a.Q.x4(z))return a.Q.p(0,z)
 else return 0},
 m:function(a,b){if(b==null)return!1
 return b instanceof Z.RI&&b.Q===this.Q},
@@ -8411,12 +8410,13 @@ for(v=J.Nx(p);v.D();){o=v.gk()
 t=J.iN(o)
 n=H.aH(t.p(o,"condition"))
 if(n==null)throw H.b(Z.lp("Transition must have a String property 'condition'"))
-m=new Z.cJ(n,null,null)
+m=new Z.cJ(n,null,null,null)
 if(C.yo.gl0(n)){m.a=null
 m.b=null
 r=null}else{r=Z.qX(n)
 m.a=r
-m.b=Z.fU(r)}l=new J.m1(r,r.length,0,null)
+m.b=Z.fU(r)}m.c=new Z.NL(null,null,null)
+l=new J.m1(r,r.length,0,null)
 l.$builtinTypeInfo=[H.Kp(r,0)]
 for(;l.D();){k=l.c
 r=J.RE(k)
@@ -8488,7 +8488,9 @@ if(w>=s.length)return H.e(s,w)
 s=J.Tf(s[w],t)
 r=this.d
 if(w>=r.length)return H.e(r,w)
-s.sLh(J.Tf(r[w],t).gLh()+1)}}j=this.d
+r=J.Tf(r[w],t).gLh()
+if(typeof r!=="number")return r.g()
+s.sLh(r+1)}}j=this.d
 this.d=this.e
 this.e=j
 return++this.b},
@@ -8594,7 +8596,7 @@ z=J.Vg((a.shadowRoot||a.webkitShadowRoot).querySelector("#click_header"))
 H.J(new W.Ov(0,z.Q,z.a,W.wD(new A.zP(a)),z.b),[H.Kp(z,0)]).YI()
 z=J.Vg((a.shadowRoot||a.webkitShadowRoot).querySelector("#import_header"))
 H.J(new W.Ov(0,z.Q,z.a,W.wD(new A.Wf(a)),z.b),[H.Kp(z,0)]).YI()
-W.Kn("configurations/conway.json",null,null).Rx(this.gEC(a),new A.Dq(a))},
+W.Kn("configurations/genesis.json",null,null).Rx(this.gEC(a),new A.Dq(a))},
 Mk:[function(a,b){var z,y,x,w
 if(a.eD===!0)this.Db(a)
 try{a.Y0=Z.Ep(b)
