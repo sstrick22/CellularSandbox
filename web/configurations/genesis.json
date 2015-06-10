@@ -1,5 +1,5 @@
 {
-	"name": "Genesis (1:10)",
+	"name": "Genesis",
 	"states": [
 		{
 			"name": "DEAD",
@@ -10,10 +10,17 @@
 					"next": "LIVE"
 				},
 				{
-					"condition": "LIVE == 0",
+					"condition": "{GEN} < 100 && LIVE == 0",
 					"next": {
 						"LIVE": 1,
-						"DEAD": 9
+						"DEAD": 99
+					}
+				},
+				{
+					"condition": "{GEN} < 500 && LIVE == 0",
+					"next": {
+						"LIVE": 1,
+						"DEAD": 199
 					}
 				}
 			]

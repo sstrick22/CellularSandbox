@@ -11,6 +11,5 @@ part 'src/condition/node.dart';
 part 'src/condition/lexer.dart';
 part 'src/condition/parser.dart';
 part 'src/configuration.dart';
-part 'src/graphics.dart';
 part 'src/grid.dart';
 part 'src/transition.dart';

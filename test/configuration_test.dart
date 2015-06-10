@@ -47,6 +47,7 @@ void main() {
 	String condition3 = "(LIVE >= 3 && DEAD == 0) || (LIVE <= 2 && IMMORTAL != 0)";
 	String condition4 = "{aGe} > 0 && {GEN} < 100 && LIVE == 3";
 	String condition5 = "DEAD < LIVE + IMMORTAL * 2 && {GEN} % 2 == 0";
+	String condition6 = "{GEN} < 100 && LIVE == 0";
 
 	group('Condition lexing', () {
 		test(condition1, () {
@@ -127,6 +128,19 @@ void main() {
 					new life.ConditionToken(life.ConditionToken.VARIABLE_TYPE, "{GEN}"),
 					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "%"),
 					new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "2"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "=="),
+					new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "0")
+				]
+			));
+		});
+		test(condition6, () {
+			expect(life.ConditionLexer.lexCondition(condition6), orderedEquals(
+				[
+					new life.ConditionToken(life.ConditionToken.VARIABLE_TYPE, "{GEN}"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "<"),
+					new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "100"),
+					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "&&"),
+					new life.ConditionToken(life.ConditionToken.STATE_TYPE, "LIVE"),
 					new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "=="),
 					new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "0")
 				]
@@ -247,6 +261,24 @@ void main() {
 							"%",
 							new life.NumberConditionNode("2")
 						),
+						"==",
+						new life.NumberConditionNode("0")
+					)
+				)
+			));
+		});
+		test(condition6, () {
+			expect(life.ConditionParser.parseCondition(life.ConditionLexer.lexCondition(condition6)),
+			equals(
+				new life.OperatorConditionNode(
+					new life.OperatorConditionNode(
+						new life.GenerationConditionNode(),
+						"<",
+						new life.NumberConditionNode("100")
+					),
+					"&&",
+					new life.OperatorConditionNode(
+						new life.StateConditionNode("LIVE"),
 						"==",
 						new life.NumberConditionNode("0")
 					)

@@ -30,7 +30,7 @@
 			"color": "#00FF00",
 			"transitions": [
 				{
-					"condition": "LIVE == 0",
+					"condition": "{AGE} >= 3",
 					"next": "DEAD"
 				}
 			]

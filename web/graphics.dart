@@ -1,4 +1,5 @@
-part of life;
+import '../lib/life.dart';
+import 'dart:html' show CanvasRenderingContext2D;
 
 class Graphics {
 	static const int CELL_SIZE = 4;
