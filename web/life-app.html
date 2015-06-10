@@ -66,7 +66,7 @@
 				-moz-user-select: none;
 				-ms-user-select: none;
 				user-select: none;
-				-webkit-tap-highlight-color: rgba(0,0,0,0);
+				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 			}
 
 			#title {
@@ -101,20 +101,20 @@
 			}
 
 			#grid_background {
-    			position: absolute;
-    			width: 100%;
-    			height: 100%;
-    			top: 0px;
-    			left: 0px;
-    			z-index: -1;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0px;
+				left: 0px;
+				z-index: -1;
 			}
 
 			#grid_foreground {
-    			position: absolute;
-    			width: 100%;
-    			height: 100%;
-    			top: 0px;
-    			left: 0px;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0px;
+				left: 0px;
 			}
 
 		</style>
@@ -126,41 +126,46 @@
 				<div vertical layout>
 					<div id="play_header" class="collapseheader disableselect">Play</div>
 					<core-collapse id="play_collapse" opened="true" allowOverflow="true">
-	    				<div class="collapsecontent">
+						<div class="collapsecontent">
 							<div horizontal around-justified layout>
-							    <paper-radio-group id="speed_radio_group" valueattr="label" selected="Normal">
-							    	<paper-radio-button label="Slow"></paper-radio-button>
-							    	<paper-radio-button label="Normal"></paper-radio-button>
-							    	<paper-radio-button label="Fast"></paper-radio-button>
-							    </paper-radio-group>
+								<paper-radio-group id="speed_radio_group" valueattr="label"
+								                   selected="Normal">
+									<paper-radio-button label="Slow"></paper-radio-button>
+									<paper-radio-button label="Normal"></paper-radio-button>
+									<paper-radio-button label="Fast"></paper-radio-button>
+								</paper-radio-group>
 							</div>
 							<div horizontal around-justified layout>
 								<paper-button id="play_button" raised>Play</paper-button>
-								<paper-button id="step_button" raised disabled="{{playing}}">Step</paper-button>
-								<paper-button id="clear_button" raised disabled="{{playing}}">Clear</paper-button>
+								<paper-button id="step_button" raised disabled="{{playing}}">Step
+								</paper-button>
+								<paper-button id="clear_button" raised disabled="{{playing}}">
+									Clear
+								</paper-button>
 							</div>
 						</div>
 					</core-collapse>
 
 					<div id="click_header" class="collapseheader disableselect">Click</div>
 					<core-collapse id="click_collapse" opened="true" allowOverflow="true">
-	    				<div class="collapsecontent">
+						<div class="collapsecontent">
 							<div horizontal around-justified layout>
 								<paper-dropdown-menu id="state_dropdown" label="State">
 									<paper-dropdown class="dropdown" duration="250">
 										<core-menu id="state_menu" class="menu" valueattr="label">
-								            <template repeat="{{state in states}}">
-								              <paper-item label="{{state}}">{{state}}</paper-item>
-								            </template>
-							  			</core-menu>
-						  			</paper-dropdown>
+											<template repeat="{{state in states}}">
+												<paper-item label="{{state}}">{{state}}</paper-item>
+											</template>
+										</core-menu>
+									</paper-dropdown>
 								</paper-dropdown-menu>
 								<paper-dropdown-menu id="pattern_dropdown" label="Pattern" disabled>
 									<paper-dropdown class="dropdown" duration="250">
-										<core-menu id="pattern_menu" class="menu" valueattr="label" selected="Cell">
-								  			<paper-item label="Cell">Cell</paper-item>
-							  			</core-menu>
-						  			</paper-dropdown>
+										<core-menu id="pattern_menu" class="menu" valueattr="label"
+										           selected="Cell">
+											<paper-item label="Cell">Cell</paper-item>
+										</core-menu>
+									</paper-dropdown>
 								</paper-dropdown-menu>
 							</div>
 						</div>
@@ -168,7 +173,7 @@
 
 					<div id="import_header" class="collapseheader disableselect">Import</div>
 					<core-collapse id="import_collapse" opened="true" allowOverflow="true">
-	    				<div class="collapsecontent">
+						<div class="collapsecontent">
 							<div id="import_drop">Drop files here</div>
 						</div>
 					</core-collapse>
@@ -177,7 +182,9 @@
 			<core-header-panel main mode="seamed">
 				<core-toolbar>
 					<core-icon-button icon="menu" core-drawer-toggle></core-icon-button>
-					<div flex id="title" class="disableselect">{{configurationName}} - Generation {{generation}}</div>
+					<div flex id="title" class="disableselect">{{configurationName}} - Generation
+						{{generation}}
+					</div>
 					<core-icon-button icon="settings"></core-icon-button>
 				</core-toolbar>
 				<div id="content" fit horizontal around-justified layout>
@@ -195,13 +202,13 @@
 				<paper-dropdown-menu for>
 					<paper-dropdown class="dropdown" duration="250">
 						<core-menu id="state_menu" class="menu" valueattr="label">
-				            <template repeat="{{state in validStates">
-				              <paper-item label="{{state}}">{{state}}</paper-item>
-				            </template>
-			  			</core-menu>
-		  			</paper-dropdown>
+							<template repeat="{{state in validStates">
+								<paper-item label="{{state}}">{{state}}</paper-item>
+							</template>
+						</core-menu>
+					</paper-dropdown>
 				</paper-dropdown-menu>
-    		</core-label>
+			</core-label>
 			<paper-button affirmative>Cancel</paper-button>
 			<paper-button affirmative autofocus>Accept</paper-button>
 		</paper-action-dialog>

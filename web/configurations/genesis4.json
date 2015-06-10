@@ -1,33 +1,33 @@
 {
-  "name": "Genesis (1:200)",
-  "states": [
-    {
-      "name": "DEAD",
-      "color": "#808080",
-      "transitions": [
-        {
-          "condition": "LIVE == 3",
-          "next": "LIVE"
-        },
-        {
-          "condition": "LIVE == 0",
-          "next": {
-            "LIVE": 1,
-            "DEAD": 199
-          }
-        }
-      ]
-    },
-    {
-      "name": "LIVE",
-      "color": "#FFFF00",
-      "transitions": [
-        {
-          "condition": "LIVE < 2 || LIVE > 3",
-          "next": "DEAD"
-        }
-      ]
-    }
-  ],
-  "default": "DEAD"
+	"name": "Genesis (1:200)",
+	"states": [
+		{
+			"name": "DEAD",
+			"color": "#808080",
+			"transitions": [
+				{
+					"condition": "LIVE == 3",
+					"next": "LIVE"
+				},
+				{
+					"condition": "LIVE == 0",
+					"next": {
+						"LIVE": 1,
+						"DEAD": 199
+					}
+				}
+			]
+		},
+		{
+			"name": "LIVE",
+			"color": "#FFFF00",
+			"transitions": [
+				{
+					"condition": "LIVE < 2 || LIVE > 3",
+					"next": "DEAD"
+				}
+			]
+		}
+	],
+	"default": "DEAD"
 }

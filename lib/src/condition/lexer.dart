@@ -39,7 +39,8 @@ class ConditionLexer {
 			input.consume();
 		}
 
-		return new ConditionToken(ConditionToken.NUMBER_TYPE, input.text.substring(startPos, input.pos));
+		return new ConditionToken(ConditionToken.NUMBER_TYPE,
+		input.text.substring(startPos, input.pos));
 	}
 
 	static ConditionToken lexState(LexerInput input) {
@@ -49,24 +50,26 @@ class ConditionLexer {
 			input.consume();
 		}
 
-		return new ConditionToken(ConditionToken.STATE_TYPE, input.text.substring(startPos, input.pos));
+		return new ConditionToken(ConditionToken.STATE_TYPE,
+		input.text.substring(startPos, input.pos));
 	}
 
-  static ConditionToken lexVariable(LexerInput input) {
-    int startPos = input.pos;
+	static ConditionToken lexVariable(LexerInput input) {
+		int startPos = input.pos;
 
-    while (!input.end() && input.current() != '}') {
-      input.consume();
-    }
+		while (!input.end() && input.current() != '}') {
+			input.consume();
+		}
 
-    if (input.end())
-      throw new LexingException("Variable reference missing end '}'");
+		if (input.end())
+			throw new LexingException("Variable reference missing end '}'");
 
-    // Consume the end brace
-    input.consume();
+		// Consume the end brace
+		input.consume();
 
-    return new ConditionToken(ConditionToken.VARIABLE_TYPE, input.text.substring(startPos, input.pos));
-  }
+		return new ConditionToken(ConditionToken.VARIABLE_TYPE,
+		input.text.substring(startPos, input.pos));
+	}
 
 	static ConditionToken lexSymbol(LexerInput input) {
 		int startPos = input.pos;
@@ -75,18 +78,22 @@ class ConditionLexer {
 		if (char == '=' || char == '!') {
 			input.consume();
 			if (input.consumeChar('='))
-				return new ConditionToken(ConditionToken.OPERATOR_TYPE, input.text.substring(startPos, input.pos));
+				return new ConditionToken(ConditionToken.OPERATOR_TYPE,
+				input.text.substring(startPos, input.pos));
 		} else if (char == '<' || char == '>') {
 			input.consume();
 			input.consumeChar('=');
-			return new ConditionToken(ConditionToken.OPERATOR_TYPE, input.text.substring(startPos, input.pos));
+			return new ConditionToken(ConditionToken.OPERATOR_TYPE,
+			input.text.substring(startPos, input.pos));
 		} else if (char == '&' || char == '|') {
-      input.consume();
-      if (input.consumeChar(char))
-        return new ConditionToken(ConditionToken.OPERATOR_TYPE, input.text.substring(startPos, input.pos));
-    } else if (char == '+' || char == '-' || char == '*' || char == '/' || char == '%') {
-      input.consume();
-      return new ConditionToken(ConditionToken.OPERATOR_TYPE, input.text.substring(startPos, input.pos));
+			input.consume();
+			if (input.consumeChar(char))
+				return new ConditionToken(ConditionToken.OPERATOR_TYPE,
+				input.text.substring(startPos, input.pos));
+		} else if (char == '+' || char == '-' || char == '*' || char == '/' || char == '%') {
+			input.consume();
+			return new ConditionToken(ConditionToken.OPERATOR_TYPE,
+			input.text.substring(startPos, input.pos));
 		} else if (char == '(') {
 			input.consume();
 			return new ConditionToken(ConditionToken.LPAREN_TYPE, '(');
@@ -94,13 +101,14 @@ class ConditionLexer {
 			input.consume();
 			return new ConditionToken(ConditionToken.RPAREN_TYPE, ')');
 		} else if (char == '{') {
-      return lexVariable(input);
-    }
+			return lexVariable(input);
+		}
 
 		if (input.end())
 			throw new LexingException("Unexpected end of condition");
 		else
-			throw new LexingException("Unexpected character '" + input.current() + "' at position " + input.pos.toString());
+			throw new LexingException("Unexpected character '" + input.current() +
+			"' at position " + input.pos.toString());
 	}
 }
 
@@ -109,6 +117,7 @@ class LexerInput {
 	int _pos;
 
 	String get text => _text;
+
 	int get pos => _pos;
 
 	LexerInput(this._text, [this._pos = 0]) {
@@ -116,7 +125,7 @@ class LexerInput {
 			throw new Error();
 	}
 
-	String current () {
+	String current() {
 		if (_pos >= _text.length)
 			return null;
 
@@ -158,7 +167,7 @@ bool isLetter(String char) {
 		return false;
 
 	return (char.compareTo('a') >= 0 && char.compareTo('z') <= 0) ||
-			(char.compareTo('A') >= 0 && char.compareTo('Z') <= 0);
+	(char.compareTo('A') >= 0 && char.compareTo('Z') <= 0);
 }
 
 bool isWhitespace(String char) {

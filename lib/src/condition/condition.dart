@@ -6,7 +6,9 @@ class Condition {
 	ConditionNode _tree;
 
 	String get condition => _condition;
+
 	List<ConditionToken> get tokens => _tokens;
+
 	ConditionNode get tree => _tree;
 
 	Condition(this._condition) {
@@ -23,17 +25,20 @@ class Condition {
 		if (_tree == null)
 			return true;
 		else
-			return _tree.evaluate(new ConditionContext(neighborStateDistribution, age, generation)) != 0;
+			return _tree.evaluate(new ConditionContext(neighborStateDistribution, age,
+			generation)) != 0;
 	}
 }
 
 class ConditionContext {
-  Map<String, int> _neighborStateDistribution;
-  int _age, _generation;
+	Map<String, int> _neighborStateDistribution;
+	int _age, _generation;
 
-  Map<String, int> get neighborStateDistribution => _neighborStateDistribution;
-  int get age => _age;
-  int get generation => _generation;
+	Map<String, int> get neighborStateDistribution => _neighborStateDistribution;
 
-  ConditionContext(this._neighborStateDistribution, this._age, this._generation);
+	int get age => _age;
+
+	int get generation => _generation;
+
+	ConditionContext(this._neighborStateDistribution, this._age, this._generation);
 }

@@ -1,12 +1,12 @@
 part of life;
 
 class Cell {
-  String state;
-  int age;
+	String state;
+	int age;
 
-  Cell(this.state) {
-    age = 0;
-  }
+	Cell(this.state) {
+		age = 0;
+	}
 }
 
 class Grid {
@@ -16,13 +16,17 @@ class Grid {
 	List<List<Cell>> _nextCellBuffer;
 
 	int get rows => _rows;
+
 	int get cols => _cols;
-  int get generation => _generation;
+
+	int get generation => _generation;
 
 	Grid(this._rows, this._cols, this._defaultState) {
-    _generation = 0;
-		_cells = new List<List<Cell>>.generate(_rows, (int) => new List<Cell>.generate(_cols, (int) => new Cell(_defaultState)));
-		_nextCellBuffer = new List<List<Cell>>.generate(_rows, (int) => new List<Cell>.generate(_cols, (int) => new Cell(_defaultState)));
+		_generation = 0;
+		_cells = new List<List<Cell>>.generate(_rows,
+			(int) => new List<Cell>.generate(_cols, (int) => new Cell(_defaultState)));
+		_nextCellBuffer = new List<List<Cell>>.generate(_rows,
+			(int) => new List<Cell>.generate(_cols, (int) => new Cell(_defaultState)));
 	}
 
 	String getState(int row, int col) {
@@ -44,15 +48,15 @@ class Grid {
 		Map<String, int> neighborStateDistribution = new Map<String, int>();
 		for (int row = 0; row < _rows; row++) {
 			for (int col = 0; col < _cols; col++) {
-        // Check if age should be reset.
-        if (_nextCellBuffer[row][col].state != _cells[row][col].state)
-          _cells[row][col].age = 0;
+				// Check if age should be reset.
+				if (_nextCellBuffer[row][col].state != _cells[row][col].state)
+					_cells[row][col].age = 0;
 
-        // Set the next state to the current state.  This will matter if
-        // no transitions are taken.
+				// Set the next state to the current state.  This will matter if
+				// no transitions are taken.
 				_nextCellBuffer[row][col].state = _cells[row][col].state;
 
-        List<Transition> transitions = stateTransitionMap[_cells[row][col].state];
+				List<Transition> transitions = stateTransitionMap[_cells[row][col].state];
 				if (transitions.isNotEmpty) {
 					// Determine neighbor state distribution
 					neighborStateDistribution.clear();
@@ -71,16 +75,17 @@ class Grid {
 
 					// Determine which transition to take, if any.
 					for (Transition transition in transitions) {
-						if (transition.condition.evaluate(neighborStateDistribution, _cells[row][col].age, _generation)) {
+						if (transition.condition.evaluate(neighborStateDistribution,
+						_cells[row][col].age, _generation)) {
 							_nextCellBuffer[row][col].state = transition.next.state();
 							break;
 						}
 					}
 				}
 
-        // Check if age advanced during generation advance
-        if (_nextCellBuffer[row][col].state == _cells[row][col].state)
-          _nextCellBuffer[row][col].age = _cells[row][col].age + 1;
+				// Check if age advanced during generation advance
+				if (_nextCellBuffer[row][col].state == _cells[row][col].state)
+					_nextCellBuffer[row][col].age = _cells[row][col].age + 1;
 			}
 		}
 
@@ -89,17 +94,17 @@ class Grid {
 		_cells = _nextCellBuffer;
 		_nextCellBuffer = oldCells;
 
-    // Advance the generation
-    return ++_generation;
+		// Advance the generation
+		return ++_generation;
 	}
 
 	void clear() {
 		for (List<Cell> list in _cells) {
-      for (Cell cell in list) {
-        cell.state = _defaultState;
-        cell.age = 0;
-      }
-    }
-    _generation = 0;
+			for (Cell cell in list) {
+				cell.state = _defaultState;
+				cell.age = 0;
+			}
+		}
+		_generation = 0;
 	}
 }

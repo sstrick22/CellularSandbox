@@ -2,6 +2,7 @@ part of life;
 
 class ConfigurationException implements Exception {
 	String _message;
+
 	String get message => _message;
 
 	ConfigurationException(String message) {
@@ -16,12 +17,17 @@ class Configuration {
 	SplayTreeMap<String, List<Transition>> _stateTransitionMap;
 
 	String get name => _name;
+
 	String get defaultState => _defaultState;
+
 	List<String> get states => _states;
+
 	SplayTreeMap<String, String> get stateColorMap => _stateColorMap;
+
 	SplayTreeMap<String, List<Transition>> get stateTransitionMap => _stateTransitionMap;
 
-	Configuration(this._name, this._defaultState, this._states, this._stateColorMap, this._stateTransitionMap);
+	Configuration(this._name, this._defaultState, this._states, this._stateColorMap,
+		this._stateTransitionMap);
 
 	Configuration.fromJson(String json) {
 		Map config;
@@ -66,7 +72,8 @@ class Configuration {
 		}
 
 		if (!_states.contains(_defaultState))
-			throw new ConfigurationException("States must contain default state '" + _defaultState + "'");
+			throw new ConfigurationException("States must contain default state '" + _defaultState +
+			"'");
 
 		// Import transitions
 		_stateTransitionMap = new SplayTreeMap<String, List<Transition>>();
@@ -93,13 +100,14 @@ class Configuration {
 				if (next is String) {
 					if (!_states.contains(next))
 						throw new ConfigurationException("Invalid next state '" + next + "'");
-					_stateTransitionMap[stateName].add(new Transition(condition, new ConstantNextStateGenerator(next)));
+					_stateTransitionMap[stateName].add(new Transition(condition,
+					new ConstantNextStateGenerator(next)));
 				} else if ((next is Map<String, num>) && (next.length > 0)) {
 					SplayTreeMap<String, int> stateWeightMap = new SplayTreeMap<String, int>();
 					int totalWeight = 0;
 					for (String state in next.keys) {
 						if (!_states.contains(state))
-                        	throw new ConfigurationException("Invalid next state '" + state + "'");
+							throw new ConfigurationException("Invalid next state '" + state + "'");
 
 						if (((next[state] % 1) != 0) || (next[state] <= 0))
 							throw new ConfigurationException("Next state weights must be positive integers");
@@ -107,7 +115,8 @@ class Configuration {
 						stateWeightMap[state] = next[state];
 						totalWeight += next[state];
 					}
-					_stateTransitionMap[stateName].add(new Transition(condition, new RandomNextStateGenerator(stateWeightMap, totalWeight)));
+					_stateTransitionMap[stateName].add(new Transition(condition,
+					new RandomNextStateGenerator(stateWeightMap, totalWeight)));
 				} else {
 					throw new ConfigurationException("Transition must have a String or Map<String, num> property 'next'");
 				}
@@ -158,5 +167,5 @@ class Configuration {
 		return true;
 	}
 
-  int get hashCode => hashObjects([_name, _defaultState, _states, _stateColorMap, _stateTransitionMap]);
+	int get hashCode => hashObjects([_name, _defaultState, _states, _stateColorMap, _stateTransitionMap]);
 }

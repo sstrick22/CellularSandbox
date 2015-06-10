@@ -4,7 +4,8 @@ abstract class ConditionNode {
 	int evaluate(ConditionContext context);
 
 	bool operator ==(Object obj);
-  int get hashCode;
+
+	int get hashCode;
 }
 
 class OperatorConditionNode implements ConditionNode {
@@ -14,41 +15,43 @@ class OperatorConditionNode implements ConditionNode {
 	OperatorConditionNode(this._lhs, this._operator, this._rhs);
 
 	int evaluate(ConditionContext context) {
-    int lhs = _lhs.evaluate(context), rhs = _rhs.evaluate(context);
+		int lhs = _lhs.evaluate(context), rhs = _rhs.evaluate(context);
 		switch (_operator) {
 			case '==':
 				return lhs == rhs ? 1 : 0;
 			case '!=':
-        return lhs != rhs ? 1 : 0;
+				return lhs != rhs ? 1 : 0;
 			case '<':
-        return lhs < rhs ? 1 : 0;
+				return lhs < rhs ? 1 : 0;
 			case '>':
-        return lhs > rhs ? 1 : 0;
+				return lhs > rhs ? 1 : 0;
 			case '<=':
-        return lhs <= rhs ? 1 : 0;
+				return lhs <= rhs ? 1 : 0;
 			case '>=':
-        return lhs >= rhs ? 1 : 0;
-      case '+':
-        return lhs + rhs;
-      case '-':
-        return lhs - rhs;
-      case '*':
-        return lhs * rhs;
-      case '/':
-        return lhs ~/ rhs;
-      case '%':
-        return lhs % rhs;
+				return lhs >= rhs ? 1 : 0;
+			case '+':
+				return lhs + rhs;
+			case '-':
+				return lhs - rhs;
+			case '*':
+				return lhs * rhs;
+			case '/':
+				return lhs ~/ rhs;
+			case '%':
+				return lhs % rhs;
 			case '&&':
 				return _lhs != 0 && _rhs != 0 ? 1 : 0;
 			case '||':
-        return _lhs != 0 || _rhs != 0 ? 1 : 0;
+				return _lhs != 0 || _rhs != 0 ? 1 : 0;
 			default:
 				throw new Error();
 		}
 	}
 
-	bool operator ==(Object obj) => (obj is OperatorConditionNode) && (obj._operator == _operator) && (obj._lhs == _lhs) && (obj._rhs == _rhs);
-  int get hashCode => hash3(_lhs, _operator, _rhs);
+	bool operator ==(Object obj) => (obj is OperatorConditionNode) &&
+	(obj._operator == _operator) && (obj._lhs == _lhs) && (obj._rhs == _rhs);
+
+	int get hashCode => hash3(_lhs, _operator, _rhs);
 }
 
 class StateConditionNode implements ConditionNode {
@@ -64,25 +67,28 @@ class StateConditionNode implements ConditionNode {
 	}
 
 	bool operator ==(Object obj) => (obj is StateConditionNode) && (obj._state == _state);
-  int get hashCode => _state.hashCode;
+
+	int get hashCode => _state.hashCode;
 }
 
 class AgeConditionNode implements ConditionNode {
-  int evaluate(ConditionContext context) {
-    return context.age;
-  }
+	int evaluate(ConditionContext context) {
+		return context.age;
+	}
 
-  bool operator ==(Object obj) => (obj is AgeConditionNode);
-  int get hashCode => 0;
+	bool operator ==(Object obj) => (obj is AgeConditionNode);
+
+	int get hashCode => 0;
 }
 
 class GenerationConditionNode implements ConditionNode {
-  int evaluate(ConditionContext context) {
-    return context.generation;
-  }
+	int evaluate(ConditionContext context) {
+		return context.generation;
+	}
 
-  bool operator ==(Object obj) => (obj is GenerationConditionNode);
-  int get hashCode => 0;
+	bool operator ==(Object obj) => (obj is GenerationConditionNode);
+
+	int get hashCode => 0;
 }
 
 class NumberConditionNode implements ConditionNode {
@@ -97,5 +103,6 @@ class NumberConditionNode implements ConditionNode {
 	}
 
 	bool operator ==(Object obj) => (obj is NumberConditionNode) && (obj._value == _value);
-  int get hashCode => _value;
+
+	int get hashCode => _value;
 }
