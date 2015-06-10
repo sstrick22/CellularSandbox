@@ -8,7 +8,8 @@ class ConditionParser {
 	// These are the different classes of binary operators used for order of operation.
 	static Set<String> LOGICAL_OPERATORS = new Set.from(["&&", "||"]);
 	static Set<String> COMPARISON_OPERATORS = new Set.from(["==", "!=", "<", ">", "<=", ">="]);
-  static Set<String> ARITHMETIC_OPERATORS = new Set.from(["+", "-", "*", "/", "%"]);
+  static Set<String> ADDITIVE_OPERATORS = new Set.from(["+", "-"]);
+  static Set<String> MULTIPLICATIVE_OPERATORS = new Set.from(["*", "/", "%"]);
 
 	static ConditionNode parseCondition(List<ConditionToken> tokens) {
 		ParserInput input = new ParserInput(tokens);
@@ -29,11 +30,15 @@ class ConditionParser {
 	}
 
 	static ConditionNode parseComparisonOperator(ParserInput input) {
-		return parseBinaryOperator(input, parseArithmeticOperator, COMPARISON_OPERATORS);
+		return parseBinaryOperator(input, parseAdditiveOperator, COMPARISON_OPERATORS);
 	}
 
-  static ConditionNode parseArithmeticOperator(ParserInput input) {
-    return parseBinaryOperator(input, parseTerm, ARITHMETIC_OPERATORS);
+  static ConditionNode parseAdditiveOperator(ParserInput input) {
+    return parseBinaryOperator(input, parseMultiplicativeOperator, ADDITIVE_OPERATORS);
+  }
+
+  static ConditionNode parseMultiplicativeOperator(ParserInput input) {
+    return parseBinaryOperator(input, parseTerm, MULTIPLICATIVE_OPERATORS);
   }
 
 	static ConditionNode parseBinaryOperator(ParserInput input, ConditionNode parseSubtree(ParserInput input), Set<String> operators) {

@@ -40,7 +40,7 @@ void main() {
 	String condition2 = "LIVE < 2 || LIVE > 3";
 	String condition3 = "(LIVE >= 3 && DEAD == 0) || (LIVE <= 2 && IMMORTAL != 0)";
   String condition4 = "{aGe} > 0 && {GEN} < 100 && LIVE == 3";
-  String condition5 = "DEAD < LIVE + IMMORTAL && {GEN} % 2 == 0";
+  String condition5 = "DEAD < LIVE + IMMORTAL * 2 && {GEN} % 2 == 0";
 
 	group('Condition lexing', () {
 		test(condition1, () {
@@ -115,6 +115,8 @@ void main() {
             new life.ConditionToken(life.ConditionToken.STATE_TYPE, "LIVE"),
             new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "+"),
             new life.ConditionToken(life.ConditionToken.STATE_TYPE, "IMMORTAL"),
+            new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "*"),
+            new life.ConditionToken(life.ConditionToken.NUMBER_TYPE, "2"),
             new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "&&"),
             new life.ConditionToken(life.ConditionToken.VARIABLE_TYPE, "{GEN}"),
             new life.ConditionToken(life.ConditionToken.OPERATOR_TYPE, "%"),
@@ -220,7 +222,11 @@ void main() {
               new life.OperatorConditionNode(
                 new life.StateConditionNode("LIVE"),
                 "+",
-                new life.StateConditionNode("IMMORTAL")
+                new life.OperatorConditionNode(
+                    new life.StateConditionNode("IMMORTAL"),
+                    "*",
+                    new life.NumberConditionNode("2")
+                )
               )
             ),
             "&&",
