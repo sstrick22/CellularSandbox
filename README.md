@@ -3,7 +3,8 @@
 Inspired by Conway's Game of Life, this web application allows you to customize the rules of a 
 cellular automata within the bounds of a 100x100 cell grid.  Specify the possible cell states, 
 their possible transitions to other states, and the conditions under which those transitions 
-occur with a simple json configuration file described below.
+occur with a simple json configuration file described below. Checkout some example [configurations](https://github.com/sstrick22/CellularSandbox/tree/master/web/configurations) 
+for inspiration and start making your own rules of life!
 
 ## Condition
 
@@ -25,7 +26,7 @@ Any string of letters (a-z,A-Z) matching a state specified in the current config
 Resolves to the **number** of neighbors of the current cell that are in the state represented 
 by this string.
 
-#### ~~Temporal Variables~~ (Coming Soon!)
+#### Temporal Variables
 One of the strings `{AGE}` and `{GEN}` (case insensitive).  
 `{AGE}`: Resolves to the **number** of consecutive generations prior to the current generation
 where the current cell was in its current state.  
@@ -34,7 +35,7 @@ where the current cell was in its current state.
 
 ### Operators
 
-#### ~~Airthmetic Operators~~ (Coming Soon!)
+#### Airthmetic Operators
 One of the strings `+`, `-`, `*`, `/`, and `%`. These are binary operators that expect two 
 **number** arguments and resolve to a **number**.  
 `+`: Resolves to the sum of the two arguments.  
