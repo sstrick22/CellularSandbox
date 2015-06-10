@@ -13,11 +13,18 @@
 					"condition": "{GEN} < 100 && LIVE == 0",
 					"next": {
 						"LIVE": 1,
-						"DEAD": 99
+						"DEAD": 49
 					}
 				},
 				{
 					"condition": "{GEN} < 500 && LIVE == 0",
+					"next": {
+						"LIVE": 1,
+						"DEAD": 99
+					}
+				},
+				{
+					"condition": "{GEN} < 1000 && LIVE == 0",
 					"next": {
 						"LIVE": 1,
 						"DEAD": 199

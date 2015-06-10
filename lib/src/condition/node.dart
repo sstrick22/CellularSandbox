@@ -15,34 +15,34 @@ class OperatorConditionNode implements ConditionNode {
 	OperatorConditionNode(this._lhs, this._operator, this._rhs);
 
 	int evaluate(ConditionContext context) {
-		int lhs = _lhs.evaluate(context), rhs = _rhs.evaluate(context);
+		int lhsResult = _lhs.evaluate(context), rhsResult = _rhs.evaluate(context);
 		switch (_operator) {
 			case '==':
-				return lhs == rhs ? 1 : 0;
+				return lhsResult == rhsResult ? 1 : 0;
 			case '!=':
-				return lhs != rhs ? 1 : 0;
+				return lhsResult != rhsResult ? 1 : 0;
 			case '<':
-				return lhs < rhs ? 1 : 0;
+				return lhsResult < rhsResult ? 1 : 0;
 			case '>':
-				return lhs > rhs ? 1 : 0;
+				return lhsResult > rhsResult ? 1 : 0;
 			case '<=':
-				return lhs <= rhs ? 1 : 0;
+				return lhsResult <= rhsResult ? 1 : 0;
 			case '>=':
-				return lhs >= rhs ? 1 : 0;
+				return lhsResult >= rhsResult ? 1 : 0;
 			case '+':
-				return lhs + rhs;
+				return lhsResult + rhsResult;
 			case '-':
-				return lhs - rhs;
+				return lhsResult - rhsResult;
 			case '*':
-				return lhs * rhs;
+				return lhsResult * rhsResult;
 			case '/':
-				return lhs ~/ rhs;
+				return lhsResult ~/ rhsResult;
 			case '%':
-				return lhs % rhs;
+				return lhsResult % rhsResult;
 			case '&&':
-				return _lhs != 0 && _rhs != 0 ? 1 : 0;
+				return ((lhsResult != 0) && (rhsResult != 0)) ? 1 : 0;
 			case '||':
-				return _lhs != 0 || _rhs != 0 ? 1 : 0;
+				return ((lhsResult != 0) || (rhsResult != 0)) ? 1 : 0;
 			default:
 				throw new Error();
 		}
