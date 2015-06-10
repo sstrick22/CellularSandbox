@@ -4,6 +4,7 @@ class Condition {
 	String _condition;
 	List<ConditionToken> _tokens;
 	ConditionNode _tree;
+	ConditionContext _context;
 
 	String get condition => _condition;
 
@@ -19,26 +20,23 @@ class Condition {
 			_tokens = ConditionLexer.lexCondition(_condition);
 			_tree = ConditionParser.parseCondition(_tokens);
 		}
+		_context = new ConditionContext();
 	}
 
 	bool evaluate(Map<String, int> neighborStateDistribution, int age, int generation) {
 		if (_tree == null)
 			return true;
-		else
-			return _tree.evaluate(new ConditionContext(neighborStateDistribution, age,
-			generation)) != 0;
+
+		_context.neighborStateDistribution = neighborStateDistribution;
+		_context.age = age;
+		_context.generation = generation;
+		return _tree.evaluate(_context) != 0;
 	}
 }
 
 class ConditionContext {
-	Map<String, int> _neighborStateDistribution;
-	int _age, _generation;
+	Map<String, int> neighborStateDistribution;
+	int age, generation;
 
-	Map<String, int> get neighborStateDistribution => _neighborStateDistribution;
-
-	int get age => _age;
-
-	int get generation => _generation;
-
-	ConditionContext(this._neighborStateDistribution, this._age, this._generation);
+	ConditionContext();
 }
