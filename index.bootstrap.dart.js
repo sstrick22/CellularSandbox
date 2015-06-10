@@ -8592,7 +8592,7 @@ z=J.Vg((a.shadowRoot||a.webkitShadowRoot).querySelector("#click_header"))
 H.J(new W.Ov(0,z.Q,z.a,W.Yt(new A.wQ(a)),z.b),[H.Kp(z,0)]).YI()
 z=J.Vg((a.shadowRoot||a.webkitShadowRoot).querySelector("#import_header"))
 H.J(new W.Ov(0,z.Q,z.a,W.Yt(new A.zP(a)),z.b),[H.Kp(z,0)]).YI()
-W.Kn("configurations/genesis.json",null,null).Rx(this.gEC(a),new A.Wf(a))},
+W.Kn("configurations/conway.json",null,null).Rx(this.gEC(a),new A.Wf(a))},
 Mk:[function(a,b){var z,y,x,w
 if(a.eD===!0)this.Db(a)
 try{a.Y0=Z.Ep(b)
